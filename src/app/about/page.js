@@ -1,9 +1,10 @@
+'use client';
 import { useState, useEffect } from 'react';
 
-export default function Page() {
+export default function About() {
     return (
         <>
-            <p> temp </p>
+            <p> about </p>
         </>
     );
 }

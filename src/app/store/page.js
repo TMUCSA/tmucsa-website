@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 
-export default function Page() {
+export default function Store() {
     return (
         <>
-            <p> temp </p>
+            <p> store </p>
         </>
     );
 }
