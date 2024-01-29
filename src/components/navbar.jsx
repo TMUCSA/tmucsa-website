@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 
 export default function Navbar() {
     return (
-        <>
-            <div> Empty div yessir </div>
-        </>
+        <nav>
+            <div> nav nav nav </div>
+        </nav>
     );
 }
