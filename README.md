@@ -3,7 +3,11 @@
 ## Overview
 This is the website for TMUCSA, an association that promotes Chinese culture at TMU.
 
-### Command Line Tools Needed
+## Information
+Next.js has server sided rendering, backend, and frontend capabilities. Next.js is built on React.js, so you can utilize React packages. It allows an easier way of routing without `react-router-dom`. Simply put, it's easier learning Next.js than React.
+> Next.js routes work in the `src/app/` directory. Basically if you want to go to a different part of the website, like `tmucsa-website/about`, create a directory called `about` and create a `page.js` file that renders in the HTML. It's that simple. For more information on how it works, check out the [documentation](https://nextjs.org/docs)
+
+## Command Line Tools Needed
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [NodeJS](https://nodejs.org/en/download)
 
