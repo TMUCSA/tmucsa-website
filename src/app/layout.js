@@ -1,8 +1,5 @@
-import { Inter } from 'next/font/google';
 import { Navbar, Footer } from '@/components';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'TMUCSA',
@@ -12,9 +9,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Navbar />
-      <body className={inter.className}>{children}</body>
-      <Footer />
+      <body className="font-mono">
+        <Navbar />
+        <main className={"space-y-20"}>{children}</main>
+        <Footer />
+      </body>
     </html>
   )
 }
