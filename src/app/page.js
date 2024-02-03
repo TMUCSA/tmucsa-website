@@ -10,7 +10,7 @@ export default function Home() {
                 ></div>
                 
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <h1 className="text-white text-4xl font-bold text-center">WizGallery</h1>
+                    <h1 className="text-white text-4xl font-bold text-center">TMUCSA</h1>
                 </div>
             </div>
         </main>
