@@ -2,26 +2,26 @@
     { 
         "id": 1,
         "href": "/", 
-        "text": "Home" 
+        "text": "home" 
     },
     { 
         "id": 2,
         "href": "/about", 
-        "text": "About" 
+        "text": "about" 
     },
     { 
         "id": 3,
         "href": "/events", 
-        "text": "Events" 
+        "text": "events" 
     },
     {
         "id": 4,
         "href": "/store",
-        "text": "Store"
+        "text": "store"
     },
     { 
         "id": 5,
         "href": "/contact", 
-        "text": "Contact" 
+        "text": "contact" 
     }
 ]

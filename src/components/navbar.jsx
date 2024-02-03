@@ -21,17 +21,19 @@ export default function Navbar() {
 
     return (
         <nav>
-            <div className='p-10 flex justify-around'>
-                {/* <a href={navItems[0].href} id={navItems[0].id}>{navItems[0].text}</a>
-                <a href={navItems[1].href} id={navItems[1].id}>{navItems[1].text}</a>
-                <a href={navItems[2].href} id={navItems[2].id}>{navItems[2].text}</a>
-                <a href={navItems[3].href} id={navItems[3].id}>{navItems[3].text}</a>
-                <a href={navItems[4].href} id={navItems[4].id}>{navItems[4].text}</a> */}
-                {fetchItems.map((route, index) => (
-                    <Link href={route.href} key={index}>
-                        <p>{route.text}</p>
+            <div className='flex flex-row text-white items-center'>
+                <div class="logo flex pl-32 flex-1">
+                    <Link href='/'>
+                        <img className='h-28 w-28 hover:scale-110 transition-all duration-100 ease-in-out' src="/icons/logo5.png" alt="CSA LOGO" />
                     </Link>
-                ))}
+                </div>
+                <div class="nav-links flex flex-row flex-1 justify-around text-xl">
+                    {fetchItems.map((route, index) => (
+                        <Link href={route.href} key={index} className='p-4 hover:scale-110 transition-all duration-200 ease-in-out underline-on-hover'>
+                            <p>{route.text}</p>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </nav>
     );
