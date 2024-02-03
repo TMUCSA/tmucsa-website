@@ -1,40 +1,51 @@
 import { useState, useEffect } from 'react';
-import navItems from '../../public/data/nav-items.json'
-import Link from "next/link"
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
+    const [navItems, setNavItems] = useState([]);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(0);
 
     useEffect(() => {
-        const handleResize = () => {
-            setScreenWidth(window.innerWidth);
-        };
-
+        fetchData();
+        handleScroll();
+        handleResize();
+    
         window.addEventListener('resize', handleResize);
+        window.addEventListener('scroll', handleScroll);
 
         // Initial screen width
         setScreenWidth(window.innerWidth);
 
         return () => {
             window.removeEventListener('resize', handleResize);
+            window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollTop = window.scrollY;
-            const isCurrentlyScrolled = scrollTop > 150;
-            setIsScrolled(isCurrentlyScrolled);
-        };
+    const fetchData = async () => {
+        try {
+            const response = await fetch('/data/nav-items.json');
+            const data = await response.json();
+            setNavItems(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-        window.addEventListener('scroll', handleScroll);
+    const handleScroll = async () => {
+        const scrollTop = window.scrollY;
+        const isCurrentlyScrolled = scrollTop > 150;
+        setIsScrolled(isCurrentlyScrolled);
+    };
 
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    const handleResize = () => {
+        setScreenWidth(window.innerWidth);
+    };
 
-    const toggleMenu = () => {
+    const toggleMenu = async () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
@@ -43,9 +54,10 @@ export default function Navbar() {
             <div className='container mx-auto flex flex-row items-center justify-between py-2'>
                 <div className={`logo ${isMenuOpen || screenWidth < 768 ? 'hidden' : ''}`}>
                     <Link href='/'>
-                        <img className=' h-24 w-24 hover:scale-110 transition-all duration-100 ease-in-out' src="/icons/logo5.png" alt="CSA LOGO" />
+                        <Image className=' h-24 w-24 hover:scale-110 transition-all duration-100 ease-in-out' src="/icons/logo5.png" width={100} height={100} alt="CSA LOGO" />
                     </Link>
                 </div>
+                
                 <div className={`nav-links md:flex flex-row space-x-4 ${isMenuOpen ? 'block text-s ml-8 text-white' : 'hidden text-xl text-gray-400'}`}>
                     {navItems.map((route, index) => (
                         <Link href={route.href} key={index} className='p-4 hover:scale-110 transition-all duration-200 ease-in-out underline-on-hover hover:text-white hover:-translate-y-1'>
@@ -53,6 +65,7 @@ export default function Navbar() {
                         </Link>
                     ))}
                 </div>
+                
                 <div className="md:hidden">
                     <button className="text-white focus:outline-none px-6 py-2" onClick={toggleMenu}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
