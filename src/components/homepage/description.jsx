@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 export default function Description() {
     const [animationTriggered, setAnimationTriggered] = useState(false);
-    const { ref, inView } = useInView();
+    const { ref, inView } = useInView({
+        threshold: 0.5,
+    });
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -23,13 +25,15 @@ export default function Description() {
             x: 0,
             transition: {
                 duration: 0.5,
-                delay: 0.4,
+                delay: 0.2,
                 ease: 'easeInOut',
             },
         },
     };
 
     useEffect(() => {
+        console.log("inView:", inView);
+        console.log("animationTriggered:", animationTriggered);
         if (inView && !animationTriggered) {
             setAnimationTriggered(true);
         }
@@ -44,7 +48,7 @@ export default function Description() {
                 className="flex flex-col sm:flex-row items-center sm:items-start sm:w-[80%] xl:w-[50%]"
                 variants={containerVariants}
                 initial="hidden"
-                animate="visible"
+                animate={inView || animationTriggered ? "visible" : "hidden"}
             >
                 <motion.div
                     className="flex flex-col mr-0 sm:mr-12 mb-6 sm:mb-0"
