@@ -1,32 +1,37 @@
 [
-    { 
-        "id": 1,
-        "path": "/images/carousel/patty.jpg", 
-        "alt": "Patty" 
+    {
+        "id": 2,
+        "path": "/images/carousel/lny-party.jpg", 
+        "alt": "LNY Party 🥳"
     },
     { 
         "id": 2,
-        "path": "/images/carousel/christmas.jpg", 
-        "alt": "Christmas" 
+        "path": "/images/carousel/patty.jpg", 
+        "alt": "patty event 🎊" 
     },
     { 
         "id": 3,
-        "path": "/images/carousel/speedfriendship.jpg",  
-        "alt": "speedfriendship" 
-    },
-    {
-        "id": 4,
-        "path": "/images/carousel/csa.jpg",
-        "alt": "Cool CSA Photo"
+        "path": "/images/carousel/christmas.jpg", 
+        "alt": "christmas 🎄" 
     },
     { 
+        "id": 4,
+        "path": "/images/carousel/speedfriendship.jpg",  
+        "alt": "speed friendship 💬" 
+    },
+    {
         "id": 5,
-        "path": "/images/carousel/volleyball.jpg", 
-        "alt": "volleyball tourney" 
+        "path": "/images/carousel/csa.jpg",
+        "alt": "csa! 🐲"
     },
     { 
         "id": 6,
+        "path": "/images/carousel/volleyball.jpg", 
+        "alt": "volleyball tourney 🏐" 
+    },
+    { 
+        "id": 7,
         "path": "/images/carousel/bunny.jpg", 
-        "alt": "bunny event" 
+        "alt": "bunny event 🐇" 
     }
 ]
