@@ -3,4 +3,4 @@ export { default as Navbar } from './general/navbar';
 export { default as Footer } from './general/footer';
 export { default as Carousel } from './homepage/carousel';
 export { default as Description } from './homepage/description';
-export { default as Engage } from './homepage/engage';
+export { default as Follow } from './homepage/follow';

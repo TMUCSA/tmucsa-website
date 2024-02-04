@@ -3,6 +3,7 @@ import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import Title from './title';
+import Image from "next/legacy/image";
 
 export default function Carousel() {
     const [images, setImages] = useState([]);
@@ -34,10 +35,13 @@ export default function Carousel() {
             >
                 {images.map((image, index) => (
                     <SwiperSlide key={index} className="swiper-slide">
-                        <div
-                            className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center"
-                            style={{ backgroundImage: `url('${image.path}')` }}
-                        ></div>
+                        <Image
+                            src={image.path}
+                            alt={image.alt}
+                            layout='fill'
+                            priority={true}
+                            className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center object-cover"
+                        />
                     
                         <div className="absolute bottom-0 left-0 p-4 bg-black bg-opacity-50 text-white z-10">
                             <h3 className="text-xl">{image.alt}</h3>

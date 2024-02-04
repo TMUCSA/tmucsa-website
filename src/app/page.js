@@ -1,12 +1,12 @@
 'use client';
-import { Carousel, Description, Engage } from '@/components';
+import { Carousel, Description, Follow } from '@/components';
 
 export default function Home() {
     return (
         <main>
             <Carousel />
             <Description />
-            <Engage />
+            <Follow />
         </main>
     );
 };
