@@ -1,0 +1,32 @@
+[
+    { 
+        "id": 1,
+        "path": "/images/carousel/patty.jpg", 
+        "alt": "Patty" 
+    },
+    { 
+        "id": 2,
+        "path": "/images/carousel/christmas.jpg", 
+        "alt": "Christmas" 
+    },
+    { 
+        "id": 3,
+        "path": "/images/carousel/speedfriendship.jpg",  
+        "alt": "speedfriendship" 
+    },
+    {
+        "id": 4,
+        "path": "/images/carousel/csa.jpg",
+        "alt": "Cool CSA Photo"
+    },
+    { 
+        "id": 5,
+        "path": "/images/carousel/volleyball.jpg", 
+        "alt": "volleyball tourney" 
+    },
+    { 
+        "id": 6,
+        "path": "/images/carousel/bunny.jpg", 
+        "alt": "bunny event" 
+    }
+]
