@@ -1,3 +1,6 @@
 'use client';
-export { default as Navbar } from './navbar';
-export { default as Footer } from './footer';
+export { default as Navbar } from './general/navbar';
+export { default as Footer } from './general/footer';
+export { default as Carousel } from './homepage/carousel';
+export { default as Description } from './homepage/description';
+export { default as Follow } from './homepage/follow';

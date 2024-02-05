@@ -1,18 +1,12 @@
 'use client';
+import { Carousel, Description, Follow } from '@/components';
 
 export default function Home() {
     return (
         <main>
-            <div className="h-[90vh] relative overflow-hidden">
-                <div
-                    className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center"
-                    style={{ backgroundImage: "url('/images/csa-4.jpg')" }}
-                ></div>
-                
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <h1 className="text-white text-4xl font-bold text-center">TMUCSA</h1>
-                </div>
-            </div>
+            <Carousel />
+            <Description />
+            <Follow />
         </main>
     );
 };
