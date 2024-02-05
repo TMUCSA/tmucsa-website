@@ -24,7 +24,7 @@ export default function Carousel() {
 
     return (
         <div className="relative">
-            <Title />
+            <Title title="TMUCSA" />
             
             <Swiper
                 modules={[Autoplay]}

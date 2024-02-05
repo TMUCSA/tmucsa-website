@@ -42,7 +42,7 @@ export default function Description() {
     return (
         <div 
             ref={ref}
-            className="h-[80vh] flex justify-center items-center bg-black text-white p-8"
+            className="h-[65vh] flex justify-center items-center text-white p-8"
         >
             <motion.div
                 className="flex flex-col sm:flex-row items-center sm:items-start sm:w-[80%] xl:w-[50%]"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export default function Title() {
+export default function Title({ title }) {
     const titleVariants = {
         hidden: { opacity: 0, y: -20 },
         visible: {
@@ -29,7 +29,7 @@ export default function Title() {
                 initial="hidden"
                 animate="visible"
             >
-                {Array.from("TMUCSA").map((letter, index) => (
+                {Array.from(title).map((letter, index) => (
                     <motion.span key={index} variants={letterVariants} className="inline-block">
                         {letter}
                     </motion.span>
