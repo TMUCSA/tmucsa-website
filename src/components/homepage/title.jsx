@@ -8,7 +8,7 @@ export default function Title({ title }) {
             opacity: 1,
             y: 0,
             transition: {
-                staggerChildren: 0.5, // Adjust the delay between each letter animation
+                staggerChildren: 0.5,
             },
         },
     };
