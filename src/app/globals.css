@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: rgb(10, 8, 27);
+body{
+    background-color: rgb(10, 8, 27);
 }
+
+.underline-on-hover {
+    position: relative;
+  }
+  
+  .underline-on-hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 10px; /* Adjust this value to set spacing between text and underline */
+    width: 100%;
+    height: 2px; /* Adjust this value to set the thickness of the underline */
+    background-color: #4b6793; /* Adjust this value to set the color of the underline */
+    transform-origin: bottom left;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .underline-on-hover:hover::after {
+    transform: scaleX(1);
+  }
+  
