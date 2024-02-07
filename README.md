@@ -1,7 +1,7 @@
 # TMUCSA Website Project
 
 ## Overview
-This is the website for TMUCSA, an association that promotes Chinese culture at TMU.
+This is the website for TMUCSA, a social club that promotes student wellbeing through various activities at TMU.
 
 ## Information
 Next.js has server sided rendering, backend, and frontend capabilities. Next.js is built on React.js, so you can utilize React packages. It allows an easier way of routing without `react-router-dom`. Simply put, it's easier learning Next.js than React.
