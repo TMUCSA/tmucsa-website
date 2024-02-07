@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['scontent.cdninstagram.com'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'scontent.cdninstagram.com',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'scontent-yyz1-1.cdninstagram.com',
+                pathname: '/**',
+            }
+        ],
     },
 }
 

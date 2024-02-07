@@ -4,6 +4,7 @@ import './globals.css';
 export const metadata = {
   title: 'TMUCSA',
   description: '... a chinese student association',
+  icons: [{ url: '/icons/icon.ico', rel: 'icon' }]
 }
 
 export default function RootLayout({ children }) {
