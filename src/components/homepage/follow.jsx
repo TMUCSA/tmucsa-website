@@ -15,7 +15,7 @@ export default function Follow() {
     const fetchInstagramData = async () => {
         try {
             const data = await fetch(`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,children{media_url,thumbnail_url}&access_token=${process.env.NEXT_PUBLIC_INSTAGRAM_KEY}&limit=13`);
-            const feed = await data.json();
+            const feed = await data.json(); // limit to 13 api calls. holy fk
             setInstagramData(feed.data);
         } catch (err) {
             console.error(err);
