@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        unoptimized: true, // images will not be optimized 
+        unoptimized: true, // images will not be optimized TESTING
         remotePatterns: [
             {
                 protocol: 'https',
