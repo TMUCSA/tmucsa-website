@@ -38,6 +38,7 @@ export default function Follow() {
                         {post.media_type === 'IMAGE' ? (
                             <Link href={post.permalink} target='_blank'>
                                 <Image
+                                    unoptimized
                                     src={post.media_url}
                                     alt={post.id}
                                     layout='fill'
