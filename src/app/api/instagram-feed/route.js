@@ -1,8 +1,8 @@
 async function fetchInstagramData() {
     try {
-        const data = await fetch(`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,children{media_url,thumbnail_url}&access_token=${process.env.NEXT_PUBLIC_INSTAGRAM_KEY}`);
+        const data = await fetch({"test": "hello"});
         const feed = await data.json();
-        return feed.data.slice(0, 13);
+        return feed;
     } catch (err) {
         console.error(err);
     }
