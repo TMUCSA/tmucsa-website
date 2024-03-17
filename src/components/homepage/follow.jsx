@@ -14,16 +14,14 @@ export default function Follow() {
 
     const fetchInstagramData = async () => {
         try {
-            const data = await fetch(`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,children{media_url,thumbnail_url}&access_token=${process.env.NEXT_PUBLIC_INSTAGRAM_KEY}`);
+            const data = await fetch('/api/instagram');
             const feed = await data.json();
-            setInstagramData(feed.data.slice(0, 13));
+            setInstagramData(feed);
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
-    console.log(instagramData);
-    
     return (
         <main className='text-white def-font pb-14 '>
             <h1 className='text-center text-[1rem] md:text-[2rem] md:leading-[0.9] lg:text-[2rem] lg:leading-[0.9] font-bold mb-4'> Follow our Instagram! </h1>
@@ -40,6 +38,7 @@ export default function Follow() {
                         {post.media_type === 'IMAGE' ? (
                             <Link href={post.permalink} target='_blank'>
                                 <Image
+                                    unoptimized // This is to prevent image from being optimized
                                     src={post.media_url}
                                     alt={post.id}
                                     layout='fill'

@@ -32,8 +32,6 @@ export default function Description() {
     };
 
     useEffect(() => {
-        console.log("inView:", inView);
-        console.log("animationTriggered:", animationTriggered);
         if (inView && !animationTriggered) {
             setAnimationTriggered(true);
         }
