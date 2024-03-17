@@ -11,7 +11,7 @@ body{
   }
   
   .underline-on-hover::after {
-    content: '';
+    content: ''; /* content */
     position: absolute;
     left: 0;
     bottom: 10px; /* Adjust this value to set spacing between text and underline */
