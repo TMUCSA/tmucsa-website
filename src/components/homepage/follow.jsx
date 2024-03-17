@@ -25,11 +25,11 @@ export default function Follow() {
     console.log(instagramData);
     
     return (
-        <main className='text-white'>
-            <h1 className='text-center text-[2rem] md:text-[3rem] md:leading-[0.9] lg:text-[4rem] lg:leading-[0.9] font-bold mb-4'> Follow our Instagram! </h1>
+        <main className='text-white def-font pb-14 '>
+            <h1 className='text-center text-[1rem] md:text-[2rem] md:leading-[0.9] lg:text-[2rem] lg:leading-[0.9] font-bold mb-4'> Follow our Instagram! </h1>
 
             <p className='text-center md:text-[1.1rem] lg:text-2xl'>
-                check out our instagram at <Link className='underline text-blue-400 hover:text-blue-600 hover:scale-110 transition-all' href='https://www.instagram.com/tmucsa/' target='_blank'>
+                <Link className='underline text-blue-400 hover:text-blue-600 hover:scale-110 transition-all' href='https://www.instagram.com/tmucsa/' target='_blank'>
                     @tmucsa
                 </Link>
             </p>

@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Protest+Revolution&family=Ubuntu:wght@300;400;500;700&display=swap');
+
+.title {
+    font-family: 'Protest Revolution', sans-serif;
+}
+
+.def-font{
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.text-thin{
+    font-weight: 100;
+}
+
+.text-light{
+    font-weight: 300;
+}
+
+.text-reg{
+    font-weight: 400;
+}
+
+.text-med{
+    font-weight: 500;
+}
+
+.text-semi{
+    font-weight: 600;
+}
+
+.text-bold{
+    font-weight: 700;
+}

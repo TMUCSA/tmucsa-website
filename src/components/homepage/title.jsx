@@ -8,7 +8,7 @@ export default function Title({ title }) {
             opacity: 1,
             y: 0,
             transition: {
-                staggerChildren: 0.5,
+                staggerChildren: 0.3,
             },
         },
     };
@@ -22,9 +22,9 @@ export default function Title({ title }) {
     };
 
     return (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
+        <div className="title absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
             <motion.h1 
-                className="text-white text-5xl md:text-6xl lg:text-7xl font-bold text-center"
+                className="text-white text-5xl md:text-6xl lg:text-9xl font-bold text-center tracking-widest"
                 variants={titleVariants}
                 initial="hidden"
                 animate="visible"

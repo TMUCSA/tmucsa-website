@@ -17,7 +17,7 @@ body{
     bottom: 10px; /* Adjust this value to set spacing between text and underline */
     width: 100%;
     height: 2px; /* Adjust this value to set the thickness of the underline */
-    background-color: #4b6793; /* Adjust this value to set the color of the underline */
+    background-color: #0a2c62; /* Adjust this value to set the color of the underline */
     transform-origin: bottom left;
     transform: scaleX(0);
     transition: transform 0.3s ease;
@@ -26,4 +26,5 @@ body{
   .underline-on-hover:hover::after {
     transform: scaleX(1);
   }
+  
   

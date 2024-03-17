@@ -3,8 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 
-
-
 export default function Footer() {
     const [navItems, setNavItems] = useState([]);
     const [footerItems, setFooterItems] = useState([]);
@@ -36,7 +34,7 @@ export default function Footer() {
             <div className="container mx-auto flex justify-between pr-4 md:pr-12">
                 <div className="md:flex md:w-1/3 flex w-1/2 align-text-bottom flex-col border-r-2 border-zinc-500">
                     <Image className=' h-44 w-44 hover:scale-110 transition-all duration-100 ease-in-out' src="/icons/logo5.png" width={300} height={300} alt="CSA LOGO" />
-                    <h1 className="text-5xl font-bold mt-3 mr-20 pl-4">TMUCSA</h1>
+                    <h1 className="text-5xl font-bold mt-3 mr-20 pl-4 title">TMUCSA</h1>
                     <p className="text-sm mt-16 pl-4 pr-8 text-zinc-400">The TMUCSA is an unparalleled social club driven to build a fun, inclusive student community while boosting the student life at TMU.</p>
                 </div>
 

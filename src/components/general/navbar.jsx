@@ -50,7 +50,7 @@ export default function Navbar() {
     };
 
     return (
-        <nav className={`w-full top-0 left-0 fixed z-50 transition-all duration-300 ease-in ${isScrolled ? (screenWidth < 768 ? '' : 'bg-black bg-opacity-0') : (screenWidth < 768 ? '' : 'bg-default')} ${isMenuOpen ? 'bg-black bg-opacity-40': ''}`}>
+        <nav className={`w-full def-font top-0 left-0 fixed z-50 transition-all duration-300 ease-in bg-gradient-to-t from-transparent from-0% to-default ${isScrolled ? (screenWidth < 768 ? '' : 'bg-black bg-opacity-0') : (screenWidth < 768 ? '' : 'bg-default')} ${isMenuOpen ? 'bg-black bg-opacity-40': ''}`}>
             <div className='container mx-auto flex flex-row items-center justify-between py-2'>
                 <div className={`logo ${isMenuOpen || screenWidth < 768 ? 'hidden' : ''}`}>
                     <Link href='/'>
@@ -58,9 +58,9 @@ export default function Navbar() {
                     </Link>
                 </div>
                 
-                <div className={`nav-links md:flex flex-row space-x-4 ${isMenuOpen ? 'block text-s ml-8 text-white text-center h-svh bg-opacity-70 z-30' : 'hidden text-lg text-gray-400'}`}>
+                <div className={`nav-links md:flex flex-row space-x-4 ${isMenuOpen ? 'block text-s ml-8 text-white text-center h-svh bg-opacity-70 z-30' : 'hidden text-xl text-gray-400'}`}>
                     {navItems.map((route, index) => (
-                        <Link href={route.href} key={index} className='p-4 hover:scale-110 transition-all duration-200 ease-in-out underline-on-hover hover:text-white hover:-translate-y-1'>
+                        <Link href={route.href} key={index} className='p-4 hover:scale-105 transition-all duration-200 ease-in-out text-reg drop-shadow-xl underline-on-hover hover:text-white hover:-translate-y-1'>
                             <p>{route.text}</p>
                         </Link>
                     ))}

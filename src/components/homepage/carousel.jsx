@@ -43,7 +43,7 @@ export default function Carousel() {
                             className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center object-cover"
                         />
                     
-                        <div className="absolute bottom-0 left-0 p-4 bg-black bg-opacity-50 text-white z-10">
+                        <div className="absolute bottom-0 left-0 p-4 bg-black bg-opacity-50 text-white z-10 font-def">
                             <h3 className="text-xl">{image.alt}</h3>
                         </div>    
                     </SwiperSlide>

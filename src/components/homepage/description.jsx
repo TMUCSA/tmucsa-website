@@ -42,27 +42,42 @@ export default function Description() {
     return (
         <div 
             ref={ref}
-            className="h-[65vh] flex justify-center items-center text-white p-8"
+            className="flex flex-col justify-between p-36 items-center text-white def-font bg-darker"
         >
             <motion.div
-                className="flex flex-col sm:flex-row items-center sm:items-start sm:w-[80%] xl:w-[50%]"
+                className="h-[100vh] flex flex-1 flex-row md:flex-row sm:flex-col xs:flex-col items-start sm:items-start sm:w-[80%] xl:w-[80%]"
                 variants={containerVariants}
                 initial="hidden"
                 animate={inView || animationTriggered ? "visible" : "hidden"}
             >
-                <motion.div
-                    className="flex flex-col mr-0 sm:mr-12 mb-6 sm:mb-0"
-                    variants={itemVariants}
-                >
-                    <motion.h2 className="text-[3rem] md:text-[5rem] md:leading-[0.9] lg:text-[6rem] lg:leading-[0.9] font-bold mb-4">
+                <motion.div class="flex-1 text-center h-full">
+                    <motion.h2 className="text-[2rem] md:text-[2rem] md:leading-[0.9] lg:text-[5rem] lg:leading-[0.9] font-bold mb-4 title text-center">
                         About Us
                     </motion.h2>
-                    
-                    <motion.hr className="border-white w-full my-4" />
                 </motion.div>
                 
                 <motion.p 
-                    className="text-justify md:text-[1.1rem] lg:text-2xl"
+                    className="md:text-[1.1rem] lg:text-xl tracking-wide flex-1 lg:border-l-2 border-gray-400 pl-8"
+                    variants={itemVariants}
+                >
+                    TMUCSA is a dynamic community that brings together Chinese students from various backgrounds to foster cultural exchange, academic growth, and social connections.
+                    We provide a welcoming space for students to explore their cultural identity, engage in meaningful activities, and build lifelong friendships.
+                </motion.p>
+            </motion.div>
+            <motion.div
+                className="h-[100vh] flex flex-row md:flex-row sm:flex-col xs:flex-col items-start sm:items-start sm:w-[80%] xl:w-[80%]"
+                variants={containerVariants}
+                initial="hidden"
+                animate={inView || animationTriggered ? "visible" : "hidden"}
+            >
+                <motion.div class="flex-1 text-center h-full">
+                    <motion.h2 className="text-[2rem] md:text-[2rem] md:leading-[0.9] lg:text-[5rem] lg:leading-[0.9] font-bold mb-4 title text-center">
+                        About Us
+                    </motion.h2>
+                </motion.div>
+                
+                <motion.p 
+                    className="md:text-[1.1rem] lg:text-xl tracking-wide flex-1 lg:border-l-2 border-gray-400 pl-8"
                     variants={itemVariants}
                 >
                     TMUCSA is a dynamic community that brings together Chinese students from various backgrounds to foster cultural exchange, academic growth, and social connections.
