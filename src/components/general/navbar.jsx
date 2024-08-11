@@ -51,7 +51,7 @@ export default function Navbar() {
 
     return (
         <nav className={`w-full top-0 left-0 fixed flex items-center justify-center z-50 transition-all duration-300 ease-in ${isScrolled ? (screenWidth < 768 ? '' : 'bg-black bg-opacity-0') : (screenWidth < 768 ? '' : 'bg-default')} ${isMenuOpen ? 'bg-black bg-opacity-40': ''}`}>
-            <div className='container flex flex-row items-center justify-between'>
+            <div className='container flex flex-row items-center justify-between px-40'>
                 <div className={`logo ${isMenuOpen || screenWidth < 768 ? 'hidden' : ''}`}>
                     <Link href='/'>
                         <Image className='h-16 w-16' src="/icons/logo5.png" width={300} height={300} alt="CSA LOGO" />
