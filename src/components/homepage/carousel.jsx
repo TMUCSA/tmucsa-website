@@ -24,14 +24,14 @@ export default function Carousel() {
 
     return (
         <div className="relative">
-            <Title title="TMUCSA" />
+            <Title title="" />
             
             <Swiper
                 modules={[Autoplay]}
                 slidesPerView={1}
                 autoplay={{ delay: 2500 }}
                 loop={images.length > 1 ? true : false}
-                className="h-screen relative overflow-hidden"
+                className="h-[700px] my-12 relative overflow-hidden"
             >
                 {images.map((image, index) => (
                     <SwiperSlide key={index} className="swiper-slide">
@@ -41,11 +41,7 @@ export default function Carousel() {
                             layout='fill'
                             priority={true}
                             className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center object-cover"
-                        />
-                    
-                        <div className="absolute bottom-0 left-0 p-4 bg-black bg-opacity-50 text-white z-10">
-                            <h3 className="text-xl">{image.alt}</h3>
-                        </div>    
+                        />    
                     </SwiperSlide>
                 ))}
             </Swiper>

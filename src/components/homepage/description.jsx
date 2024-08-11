@@ -19,12 +19,12 @@ export default function Description() {
         },
     };
     const itemVariants = {
-        hidden: { opacity: 0, x: -50 },
+        hidden: { opacity: 0, y: 100 },
         visible: {
             opacity: 1,
-            x: 0,
+            y: 0,
             transition: {
-                duration: 0.5,
+                duration: 0.3,
                 delay: 0.2,
                 ease: 'easeInOut',
             },
@@ -40,10 +40,10 @@ export default function Description() {
     return (
         <div 
             ref={ref}
-            className="h-[65vh] flex justify-center items-center text-white p-8"
+            className="py-40 flex justify-center items-center text-white px-40"
         >
             <motion.div
-                className="flex flex-col sm:flex-row items-center sm:items-start sm:w-[80%] xl:w-[50%]"
+                className="flex flex-col sm:flex-row items-center sm:items-start"
                 variants={containerVariants}
                 initial="hidden"
                 animate={inView || animationTriggered ? "visible" : "hidden"}
