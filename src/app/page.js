@@ -6,7 +6,6 @@ export default function Home() {
         <main>
             <Carousel />
             <Description />
-            <Follow />
         </main>
     );
 };

@@ -11,19 +11,19 @@ export default function Footer() {
                 </div>
                 <div className="flex items-center justify-around px-28 w-1/3 h-full">
                     <Link href="https://www.linkedin.com/company/toronto-metropolitan-university-chinese-student-association/" target="_blank">
-                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 hover:scale-110 transition-all duration-200 ease-in-out cursor-pointer hover:-translate-y-1 ' src="/icons/socials/linkedin.png" width={300} height={300} alt="Linkedin" />
+                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 hover:scale-110 transition-all duration-200 ease-in-out cursor-pointer ' src="/icons/socials/linkedin.png" width={300} height={300} alt="Linkedin" />
                     </Link>
                     <Link href="https://www.instagram.com/tmucsa/" target="_blank">
-                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer hover:-translate-y-1' src="/icons/socials/instagram.png" width={300} height={300} alt="Instagram" />
+                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer' src="/icons/socials/instagram.png" width={300} height={300} alt="Instagram" />
                     </Link>
                     <Link href="https://tiktok.com/@tmucsa" target="_blank">
-                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer hover:-translate-y-1' src="/icons/socials/tik-tok.png" width={300} height={300} alt="TikTok" />
+                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer' src="/icons/socials/tik-tok.png" width={300} height={300} alt="TikTok" />
                     </Link>
                     <Link href="https://discord.gg/K2Pu8W56EV" target="_blank">
-                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer hover:-translate-y-1' src="/icons/socials/discord.png" width={300} height={300} alt="Discord" />
+                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer' src="/icons/socials/discord.png" width={300} height={300} alt="Discord" />
                     </Link>
                 </div>
-                <div className="text-center w-full text-md tracking-wider">
+                <div className="text-center w-full text-md tracking-wider text-gray-100">
                     <p>© 2024 TMUCSA (Toronto Metropolitan Chinese Student Association) | All rights reserved.</p>
                 </div>
             </div>
