@@ -19,13 +19,12 @@ export default function Description() {
         },
     };
     const itemVariants = {
-        hidden: { opacity: 0, y: 100 },
+        hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            y: 0,
             transition: {
-                duration: 0.3,
-                delay: 0.6,
+                duration: 0.6,
+                delay: 0.3,
                 ease: 'easeInOut',
             },
         },
@@ -37,28 +36,29 @@ export default function Description() {
         }
     }, [inView, animationTriggered]);
 
+    const description = "We are a dynamic community that brings together Chinese students from various backgrounds to foster cultural exchange, academic growth, and social connections. We provide a welcoming space for students to explore their cultural identity, engage in meaningful activities, and build lifelong friendships.";
+
     return (
         <div 
             ref={ref}
             className="py-40 flex justify-center items-center text-white mx-96"
         >
             <motion.div
-                className="flex flex-col justify-center"
+                className="flex flex-col justify-center items-center "
                 variants={containerVariants}
                 initial="hidden"
                 animate={inView || animationTriggered ? "visible" : "hidden"}
             >
-                <motion.div className="" variants={itemVariants}>
-                    <motion.h2 className="">
-                        WHO ARE WE?
+                <motion.div className="font-josefin flex flex-col items-center justify-center" variants={itemVariants}>
+                    <motion.h2 className="text-4xl font-semibold">
+                        WHAT IS CSA?
                     </motion.h2>
                     
-                    <motion.hr className="border-white w-full my-4" />
+                    <motion.hr className="border-white w-1/2 my-4" />
                 </motion.div>
                 
-                <motion.p className="" variants={itemVariants}>
-                        `TMUCSA is a dynamic community that brings together Chinese students from various backgrounds to foster cultural exchange, academic growth, and social connections.
-                        We provide a welcoming space for students to explore their cultural identity, engage in meaningful activities, and build lifelong friendships.`
+                <motion.p className="font-jost mx-36 text-xl font-light text-center" variants={itemVariants}>
+                    {description}
                 </motion.p>
             </motion.div>
         </div>
