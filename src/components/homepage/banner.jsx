@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 
 export default function Banner() {
     const videoRef = useRef(null);
-    const screenHeight = window.innerHeight;
-    const offset = 300;
+    // const screenHeight = window.innerHeight;
+    const offset = 1300;
 
     const handleScroll = () => {
         if (videoRef.current) {
-            const scrollPosition = window.scrollY - screenHeight - offset;
+            const scrollPosition = window.scrollY - offset;
             videoRef.current.style.transform = `translateY(${scrollPosition * 0.5}px)`; // Adjust the multiplier for the effect
         }
     };
