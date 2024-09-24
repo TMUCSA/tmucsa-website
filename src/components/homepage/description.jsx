@@ -41,7 +41,7 @@ export default function Description() {
     return (
         <div 
             ref={ref}
-            className="py-40 flex justify-center items-center text-white mx-96"
+            className="py-60 flex justify-center items-center text-white"
         >
             <motion.div
                 className="flex flex-col justify-center items-center "
@@ -51,13 +51,13 @@ export default function Description() {
             >
                 <motion.div className="font-josefin flex flex-col items-center justify-center" variants={itemVariants}>
                     <motion.h2 className="text-4xl font-semibold">
-                        WHAT IS CSA?
+                        WHAT IS <span className="text-beige">CSA</span>?
                     </motion.h2>
                     
                     <motion.hr className="border-white w-1/2 my-4" />
                 </motion.div>
                 
-                <motion.p className="font-jost mx-36 text-xl font-light text-center" variants={itemVariants}>
+                <motion.p className="font-jost text-xl tracking-wide font-light text-center w-1/3" variants={itemVariants}>
                     {description}
                 </motion.p>
             </motion.div>

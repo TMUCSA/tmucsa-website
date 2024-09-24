@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans bg-default">
+      <body className="font-sans bg-default overflow-x-hidden">
         <Navbar />
         <main>{children}</main>
         <Footer />

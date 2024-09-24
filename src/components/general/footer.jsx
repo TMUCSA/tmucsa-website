@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Footer() {
 
     return (
-        <footer className=" w-screen h-52 px-20 flex text-white my-20">
+        <footer className=" w-screen h-52 px-20 flex text-white my-8 font-josefin">
             <div className="flex flex-col justify-center items-center w-full h-full">
                 <div className="w-full flex items-center justify-center">
                     <Image className='h-14 w-14 hover:rotate-[720deg] transition-all duration-1000 ease-in-out' src="/icons/logo5.png" width={300} height={300} alt="CSA LOGO" />
@@ -23,7 +23,7 @@ export default function Footer() {
                         <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer' src="/icons/socials/discord.png" width={300} height={300} alt="Discord" />
                     </Link>
                 </div>
-                <div className="text-center w-full text-md tracking-wider text-gray-100">
+                <div className="text-center font-thin w-full text-md tracking-wider text-gray-100">
                     <p>© 2024 TMUCSA (Toronto Metropolitan Chinese Student Association) | All rights reserved.</p>
                 </div>
             </div>

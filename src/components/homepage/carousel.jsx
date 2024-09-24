@@ -31,7 +31,7 @@ export default function Carousel() {
                 slidesPerView={1}
                 autoplay={{ delay: 2500 }}
                 loop={images.length > 1 ? true : false}
-                className="h-[1100px] lg:h-[800px] sm:h-[500px] my-12 relative overflow-hidden"
+                className="h-[1100px] lg:h-[800px] sm:h-[500px] mt-12 relative overflow-hidden"
             >
                 {images.map((image, index) => (
                     <SwiperSlide key={index} className="swiper-slide relative">
