@@ -50,7 +50,7 @@ export default function Navbar() {
     };
 
     return (
-        <nav className={`w-full font-josefin top-0 left-0 fixed flex items-center justify-center z-50 transition-all duration-300 ease-in ${isScrolled ? (screenWidth < 768 ? '' : 'bg-black bg-opacity-0') : (screenWidth < 768 ? '' : 'bg-default')} ${isMenuOpen ? 'bg-black bg-opacity-40': ''}`}>
+        <nav className={`w-full font-josefin top-0 left-0 fixed flex items-center justify-center z-50 transition-all duration-300 ease-in ${isScrolled ? (screenWidth < 768 ? '' : 'bg-black bg-opacity-0') : (screenWidth < 768 ? '' : 'bg-default')} ${isMenuOpen ? 'bg-black bg-opacity-40': ''} hover:bg-opacity-100 hover:bg-default`}>
             <div className='container flex flex-row items-center justify-between px-40'>
                 <div className={`logo ${isMenuOpen || screenWidth < 768 ? 'hidden' : ''}`}>
                     <Link href='/'>

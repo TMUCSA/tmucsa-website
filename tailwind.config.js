@@ -14,7 +14,8 @@ module.exports = {
       },
       colors: {
         default: 'rgb(10, 8, 27)',
-        beige: '#FFF4E2'
+        beige: '#FFF4E2',
+        navy: '#25487D'
       },
       fontFamily:{
         josefin: ["Josefin Sans", 'sans-serif'],

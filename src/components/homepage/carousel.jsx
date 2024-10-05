@@ -43,7 +43,7 @@ export default function Carousel() {
                             className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center object-cover"
                         />
                         {/* Adding gradient overlay */}
-                        <div className="absolute inset-x-0 bottom-0 h-[1200px] bg-gradient-to-t from-default to-transparent z-[1]" />
+                        <div className="absolute h-full inset-x-0 bottom-0 bg-gradient-to-t from-default to-transparent z-[1]" />
 
                     </SwiperSlide>
                 ))}

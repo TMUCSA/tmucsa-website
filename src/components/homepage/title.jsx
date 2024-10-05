@@ -10,7 +10,7 @@ export default function Title() {
             opacity: 1,
             y: 0,
             transition: {
-                staggerChildren: 0.07,
+                staggerChildren: 0.04,
                 // Trigger the bottom text after the first animation completes
                 onComplete: () => setShowBottomText(true),
             },
@@ -71,7 +71,7 @@ export default function Title() {
                         className="text-white text-[30px] text-center mt-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 3 }}
+                        transition={{ duration: 1, delay: 1.4 }}
                     >
                         CELEBRATING CULTURE | BUILDING CONNECTIONS | HAVING FUN
                     </motion.h1>

@@ -41,7 +41,7 @@ export default function Description() {
     return (
         <div 
             ref={ref}
-            className="py-60 flex justify-center items-center text-white"
+            className="py-40 flex justify-center items-center text-white"
         >
             <motion.div
                 className="flex flex-col justify-center items-center "
