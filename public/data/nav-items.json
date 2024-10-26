@@ -3,25 +3,5 @@
         "id": 1,
         "href": "/", 
         "text": "Home" 
-    },
-    { 
-        "id": 2,
-        "href": "/about", 
-        "text": "About" 
-    },
-    { 
-        "id": 3,
-        "href": "/events", 
-        "text": "Events" 
-    },
-    {
-        "id": 4,
-        "href": "/store",
-        "text": "Store"
-    },
-    { 
-        "id": 5,
-        "href": "/contact", 
-        "text": "Contact" 
     }
 ]
