@@ -53,4 +53,4 @@ TBD
 
 ## Developers 
 | [@andrearcaina](https://github.com/andrearcaina) | [@chen-dominic](https://github.com/chen-dominic) | [@Tristanv0](https://github.com/Tristanv0) |
-|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
+
