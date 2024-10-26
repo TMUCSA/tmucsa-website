@@ -41,20 +41,21 @@ export default function Body() {
   }, [inView, animationTriggered]);
 
   return (
-    <div className="flex flex-col items-center justify-center my-20">
+    <div className="flex flex-col items-center justify-center my-20 xl:mx-40">
       <div className="flex justify-between w-3/5 my-24">
         <div className="text-white flex flex-col justify-between w-1/2">
           <motion.div 
             variants={slideInLeft} 
             initial="hidden" 
             whileInView= "visible"
+            viewport={{once: true}}
             transition={{ duration: 0.8 }} 
             className=" text-left"
           >
-            <h1 className="font-josefin font-semibold text-3xl">OUR <span className="text-beige">GOAL</span></h1>
+            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl">
+              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
                 {ourGoal}
               </p>
             </div>
@@ -63,12 +64,13 @@ export default function Body() {
             variants={slideInRight} 
             initial="hidden" 
             whileInView="visible" 
+            viewport={{once: true}}
             transition={{ duration: 0.8 }} 
             className="text-right mt-32"
           >
-            <h1 className="font-josefin font-semibold text-3xl">WHAT WE <span className="text-navy">OFFER</span></h1>
+            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
             <div className="mt-4 flex ">
-              <p className="font-jost text-wrap font-light text-xl">
+              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
                 {weOffer}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />
@@ -79,7 +81,8 @@ export default function Body() {
           variants={fadeIn} 
           initial="hidden" 
           whileInView="visible" 
-          transition={{ duration: 0.8 }} 
+            viewport={{once: true}}
+            transition={{ duration: 0.8 }} 
           className="w-1/2 ml-20 relative h-[30rem]">
           <Image
             src={image1Path}
@@ -94,7 +97,8 @@ export default function Body() {
           variants={fadeIn} 
           initial="hidden" 
           whileInView="visible" 
-          transition={{ duration: 0.8 }} 
+            viewport={{once: true}}
+            transition={{ duration: 0.8 }} 
           className="w-1/2 mr-20 relative h-[30rem]">
             <Image
               src={image2Path}
@@ -108,12 +112,13 @@ export default function Body() {
             variants={slideInLeft} 
             initial="hidden" 
             whileInView="visible" 
+            viewport={{once: true}}
             transition={{ duration: 0.8 }} 
             className=" text-left">
-            <h1 className="font-josefin font-semibold text-3xl">OUR <span className="text-beige">VALUES</span></h1>
+            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl">
+              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
                 {values}
               </p>
             </div>
@@ -122,12 +127,13 @@ export default function Body() {
             variants={slideInRight} 
             initial="hidden" 
             whileInView="visible" 
+            viewport={{once: true}}
             transition={{ duration: 0.8 }} 
             className="text-right mt-32"
             >
-            <h1 className="font-josefin font-semibold text-3xl"><span className="text-navy">JOIN</span> US</h1>
+            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
             <div className="mt-4 flex h-fit ">
-              <p className="font-jost text-wrap font-light text-xl">
+              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
                 {joinUs}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />
