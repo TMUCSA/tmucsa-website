@@ -6,15 +6,19 @@ import Title from './title';
 import Image from "next/legacy/image";
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import Loader from '../general/loader';
 
 export default function Carousel() {
     const [images, setImages] = useState([]);
+    const [isLoading,setIsLoading] = useState(true);
 
     useEffect(() => {
         fetchImages();
     }, []);
-
+    
     const fetchImages = async () => {
+        setIsLoading(true);
+
         // try {
         //     const response = await fetch('/data/carousel-pictures.json');
         //     const data = await response.json();
@@ -31,10 +35,13 @@ export default function Carousel() {
         } catch (err) {
             console.error("big error: ", err);
         }
+        setIsLoading(false);
+
     };
 
     return (
         <div className="relative">
+            {isLoading && <Loader />}
             <Title/>
             
             <Swiper
@@ -57,7 +64,7 @@ export default function Carousel() {
 
                     </SwiperSlide>
                 ))} */}
-                {images.map(image => (
+                {isLoading ? <Loader /> : images.map(image => (
                     <SwiperSlide key={image.id} className="swiper-slide relative">
                         <Image
                             src={image.imageUrl}
@@ -72,6 +79,7 @@ export default function Carousel() {
                     </SwiperSlide>
                 ))}
             </Swiper>
+
         </div>
     );
 }
