@@ -21,7 +21,7 @@ export default function Banner() {
         <div className="w-screen h-[700px] overflow-hidden relative">
             <video
                 ref={videoRef}
-                src="/videos/csa_picnic4.mp4" // Update this with the actual path to your video
+                src="/videos/csa_picnic4.mp4"
                 autoPlay
                 loop
                 muted
