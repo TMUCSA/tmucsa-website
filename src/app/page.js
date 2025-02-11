@@ -20,7 +20,7 @@ export default function Home() {
     }, []);
 
     return (
-        <main>
+        <main className=' overflow-x-hidden'>
             {isLoading ? (
                 <Loader /> // Show the loader while loading
             ) : (

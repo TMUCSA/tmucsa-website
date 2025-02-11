@@ -50,13 +50,13 @@ export default function Navbar() {
     };
 
     return (
-        <nav className={`w-fit md:w-full font-josefin top-0 
+        <nav className={`w-full font-josefin top-0 
         
-        fixed flex items-center justify-center z-50 transition-all duration-200 ease-in 
+        fixed flex md:items-center md:justify-center z-50 transition-all duration-200 ease-in 
         
         ${isScrolled ? (screenWidth < 768 ? '' : 'bg-opacity-0') : (screenWidth < 768 ? '' : 'bg-default')} 
         
-        ${isMenuOpen ? 'bg-default w-4/5': 'bg-transparent'} 
+        ${isMenuOpen ? 'bg-transparent': 'bg-transparent'} 
         
         bg-opacity-100 md:hover:bg-default`}
         >
@@ -67,16 +67,16 @@ export default function Navbar() {
                     </Link>
                 </div>
                 
-                <div className={`nav-links md:flex flex-row space-x-4 ${isMenuOpen ? 'block text-3xl ml-8 text-white text-center h-svh bg-opacity-70 z-30' : 'hidden text-xl text-gray-400'}`}>
+                <div className={`nav-links md:flex flex-row space-x-4 ${isMenuOpen ? 'fixed top-0 right-0 w-2/3 bg-default text-3xl ml-8 text-white text-center h-svh z-30 transform transition-all -translate-x-0 opacity-100' : screenWidth < 768 ? 'fixed top-0 right-0 w-2/3 h-svh bg-default z-30 transform transition-all duration-300 ease-in-out translate-x-full opacity-0' : 'hidden text-xl text-gray-400'}`}>
                     {navItems.map((route, index) => (
-                        <Link href={route.href} key={index} className='p-4 font-light hover:scale-110 transition-all duration-200 ease-in-out underline-on-hover hover:text-white hover:-translate-y-1'>
+                        <Link href={route.href} key={index} className={`p-4 font-light ${isMenuOpen ? '' : 'hover:scale-110 transition-all duration-200 ease-in-out underline-on-hover hover:text-white hover:-translate-y-1'}`}>
                             <p>{route.text}</p>
                         </Link>
                     ))}
                 </div>
                 
                 <div className="md:hidden">
-                    <button className="text-white focus:outline-none mx-6 my-6" onClick={toggleMenu}>
+                    <button className="text-white focus:outline-none mx-6 my-6 z-50 absolute right-0 top-0" onClick={toggleMenu}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             {isMenuOpen ? (
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M6 18L18 6M6 6l12 12" />

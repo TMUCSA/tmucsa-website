@@ -65,8 +65,8 @@ export default function Body() {
   }, [images]); // This will run whenever `images` changes
 
   return (
-    <div className="flex flex-col items-center justify-center gap-12 my-12 lg:my-20 xl:mx-40">
-      <div className="flex flex-col sm:flex-row justify-between mx-6">
+    <div className="flex flex-col items-center justify-center gap-12 my-12 sm:my-24 lg:my-20 xl:mx-40">
+      <div className="flex flex-col sm:flex-row justify-between mx-6 sm:mx-12">
         <div className="text-white flex flex-col justify-between sm:w-1/2">
           <motion.div 
             variants={slideInLeft} 

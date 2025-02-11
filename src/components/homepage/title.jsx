@@ -34,11 +34,11 @@ export default function Title() {
                     animate="visible"
                     className="flex items-end justify-between mb-4"
                 >
-                    <h1 className="text-white text-xl font-normal">WHO ARE WE?</h1>
-                    <div className="bg-white h-[1px] w-1/3" />
+                    <h1 className="text-white text-xl font-normal sm:text-3xl sm:font-bold">WHO ARE WE?</h1>
+                    <div className="bg-white h-[1px] w-1/3 sm:w-1/2" />
                 </motion.div>
                 <motion.h1
-                    className="text-beige text-4xl lg:text-6xl xl:text-7xl font-bold text-left tracking-wider"
+                    className="text-beige text-4xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold text-left tracking-wider"
                     variants={titleVariants}
                     initial="hidden"
                     animate="visible"

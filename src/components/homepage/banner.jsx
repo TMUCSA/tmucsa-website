@@ -45,7 +45,7 @@ export default function Banner() {
     }, []);
 
     return (
-        <div className="w-screen h-[300px] lg:h-[700px] overflow-hidden relative">
+        <div className="w-screen h-[300px] sm:h-[400px] lg:h-[700px] overflow-hidden relative">
             <video
                 ref={videoRef}
                 src={videoUrl}

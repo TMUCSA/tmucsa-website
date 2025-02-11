@@ -36,7 +36,7 @@ export default function Carousel() {
     };
 
     return (
-        <div className="relative">
+        <div className="relative -translate-y-12">
             <Title/>
             
             <Swiper
@@ -44,7 +44,7 @@ export default function Carousel() {
                 slidesPerView={1}
                 autoplay={{ delay: 2500 }}
                 loop={images.length > 1 ? true : false}
-                className="h-svh mt-12 relative overflow-hidden"
+                className="h-[100vw] md:h-screen mt-12 relative overflow-hidden"
             >
                 {/* {images.map((image, index) => (
                     <SwiperSlide key={index} className="swiper-slide relative">
