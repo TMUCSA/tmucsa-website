@@ -4,20 +4,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import Title from './title';
 import Image from "next/legacy/image";
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import Loader from '../general/loader';
 
 export default function Carousel() {
     const [images, setImages] = useState([]);
-    const [isLoading,setIsLoading] = useState(true);
 
     useEffect(() => {
         fetchImages();
     }, []);
     
     const fetchImages = async () => {
-        setIsLoading(true);
 
         // try {
         //     const response = await fetch('/data/carousel-pictures.json');
@@ -35,13 +32,11 @@ export default function Carousel() {
         } catch (err) {
             console.error("big error: ", err);
         }
-        setIsLoading(false);
 
     };
 
     return (
         <div className="relative">
-            {isLoading && <Loader />}
             <Title/>
             
             <Swiper
@@ -49,7 +44,7 @@ export default function Carousel() {
                 slidesPerView={1}
                 autoplay={{ delay: 2500 }}
                 loop={images.length > 1 ? true : false}
-                className="h-[1100px] lg:h-[800px] sm:h-[500px] mt-12 relative overflow-hidden"
+                className="h-svh mt-12 relative overflow-hidden"
             >
                 {/* {images.map((image, index) => (
                     <SwiperSlide key={index} className="swiper-slide relative">
@@ -64,7 +59,7 @@ export default function Carousel() {
 
                     </SwiperSlide>
                 ))} */}
-                {isLoading ? <Loader /> : images.map(image => (
+                {images.map(image => (
                     <SwiperSlide key={image.id} className="swiper-slide relative">
                         <Image
                             src={image.imageUrl}
@@ -74,7 +69,7 @@ export default function Carousel() {
                             className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center object-cover"
                         />
                         {/* Adding gradient overlay */}
-                        <div className="absolute h-full inset-x-0 bottom-0 bg-gradient-to-t from-default to-transparent z-[1]" />
+                        <div className="absolute h-full inset-x-0 -bottom-1 bg-gradient-to-t from-default to-transparent z-[1]" />
 
                     </SwiperSlide>
                 ))}

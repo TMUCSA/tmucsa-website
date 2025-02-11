@@ -3,9 +3,13 @@ import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function Body() {
   const [animationTriggered, setAnimationTriggered] = useState(false);
+  const [images,setImages] = useState([]);
+
   const { ref, inView } = useInView({
     threshold: 0.5, // Adjust this threshold as needed
     triggerOnce: true, // This ensures the animation only triggers once
@@ -34,16 +38,36 @@ export default function Body() {
     visible: { opacity: 1 },
   };
 
+  const fetchImages = async () => {
+    try{
+      const querySnapshot = await getDocs(collection(db,'home-images'));
+      const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
+      console.log('fetched body 1: ', fetchedImages[0]);
+      console.log('fetched body 2: ', fetchedImages[1]);
+      setImages(fetchedImages);
+    } catch (err){
+      console.error('failed to fetch body: ', err);
+    }
+  }
+
+  useEffect(() => {
+    fetchImages();
+  },[]);
+
   useEffect(() => {
     if (inView && !animationTriggered) {
       setAnimationTriggered(true);
     }
   }, [inView, animationTriggered]);
 
+  useEffect(() => {
+    console.log('images updated: ', images);
+  }, [images]); // This will run whenever `images` changes
+
   return (
-    <div className="flex flex-col items-center justify-center my-20 xl:mx-40">
-      <div className="flex justify-between w-3/5 my-24">
-        <div className="text-white flex flex-col justify-between w-1/2">
+    <div className="flex flex-col items-center justify-center gap-12 my-12 lg:my-20 xl:mx-40">
+      <div className="flex flex-col sm:flex-row justify-between mx-6">
+        <div className="text-white flex flex-col justify-between sm:w-1/2">
           <motion.div 
             variants={slideInLeft} 
             initial="hidden" 
@@ -52,7 +76,7 @@ export default function Body() {
             transition={{ duration: 0.8 }} 
             className=" text-left"
           >
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
+            <h1 className="font-josefin font-semibold text-4xl sm:text-3xl xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
               <p className="font-jost text-wrap font-light text-xl xl:text-lg">
@@ -66,9 +90,9 @@ export default function Body() {
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className="text-right mt-32"
+            className="text-right mt-12 sm:mt-32"
           >
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
+            <h1 className="font-josefin font-semibold text-4xl sm:text-3xl xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
             <div className="mt-4 flex ">
               <p className="font-jost text-wrap font-light text-xl xl:text-lg">
                 {weOffer}
@@ -83,39 +107,39 @@ export default function Body() {
           whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-          className="w-1/2 ml-20 relative h-[30rem]">
+          className="mt-6 sm:w-1/2 sm:ml-20 relative h-64 sm:h-[30rem]">
           <Image
-            src={image1Path}
+            src={images[1]?.imageUrl}
             layout="fill"
             objectFit="cover"
-            alt="Candid photo"
+            alt={images[1]?.imageAlt}
           />
         </motion.div>
       </div>
-      <div className="flex justify-between w-3/5 my-24">
+      <div className="flex flex-col-reverse gap-12 sm:gap-0 sm:flex-row justify-between mx-6">
         <motion.div
           variants={fadeIn} 
           initial="hidden" 
           whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-          className="w-1/2 mr-20 relative h-[30rem]">
+          className="sm:mr-20 relative h-64 sm:h-[30rem]">
             <Image
-              src={image2Path}
+              src={images[0]?.imageUrl}
               layout="fill"
               objectFit="cover"
-              alt="Orientation 2023"
+              alt={images[0]?.imageAlt}
             />
           </motion.div>
-        <div className="text-white flex flex-col justify-between w-1/2">
+        <div className="text-white flex flex-col justify-between gap-12">
           <motion.div 
             variants={slideInLeft} 
             initial="hidden" 
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className=" text-left">
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
+            className=" text-left sm:mt-12">
+            <h1 className="font-josefin font-semibold text-4xl xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
               <p className="font-jost text-wrap font-light text-xl xl:text-lg">
@@ -129,9 +153,9 @@ export default function Body() {
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className="text-right mt-32"
+            className="text-right sm:mt-32"
             >
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
+            <h1 className="font-josefin font-semibold text-4xl xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
             <div className="mt-4 flex h-fit ">
               <p className="font-jost text-wrap font-light text-xl xl:text-lg">
                 {joinUs}

@@ -26,7 +26,7 @@ export default function Title() {
     };
 
     return (
-        <div className="absolute inset-0 flex items-end justify-center z-10 font-josefin">
+        <div className="absolute inset-0 flex items-end justify-center z-10 font-josefin mx-6">
             <div className="flex flex-col">
                 <motion.div
                     variants={titleVariants}
@@ -34,11 +34,11 @@ export default function Title() {
                     animate="visible"
                     className="flex items-end justify-between mb-4"
                 >
-                    <h1 className="text-white text-2xl font-bold">WHO ARE WE?</h1>
-                    <div className="bg-white h-[1px] w-2/3" />
+                    <h1 className="text-white text-xl font-normal">WHO ARE WE?</h1>
+                    <div className="bg-white h-[1px] w-1/3" />
                 </motion.div>
                 <motion.h1
-                    className="text-beige text-5xl md:text-7xl lg:text-7xl font-bold text-left tracking-wider"
+                    className="text-beige text-4xl lg:text-6xl xl:text-7xl font-bold text-left tracking-wider"
                     variants={titleVariants}
                     initial="hidden"
                     animate="visible"
@@ -68,7 +68,7 @@ export default function Title() {
                 
                 {showBottomText && (
                     <motion.h1 
-                        className="text-white text-[30px] text-center mt-6"
+                        className="text-white text-lg text-center mt-2 sm:flex hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1, delay: 1.4 }}
