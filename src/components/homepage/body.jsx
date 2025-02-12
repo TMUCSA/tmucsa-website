@@ -42,9 +42,12 @@ export default function Body() {
     try{
       const querySnapshot = await getDocs(collection(db,'home-images'));
       const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
-      console.log('fetched body 1: ', fetchedImages[0]);
-      console.log('fetched body 2: ', fetchedImages[1]);
-      setImages(fetchedImages);
+      if(fetchedImages[0].id == 'top'){
+        setImages([fetchedImages[0],fetchedImages[1]]) // [top, bottom]
+      }
+      else{
+        setImages([fetchedImages[1],fetchedImages[0]])
+      }
     } catch (err){
       console.error('failed to fetch body: ', err);
     }
@@ -60,14 +63,10 @@ export default function Body() {
     }
   }, [inView, animationTriggered]);
 
-  useEffect(() => {
-    console.log('images updated: ', images);
-  }, [images]); // This will run whenever `images` changes
-
   return (
-    <div className="flex flex-col items-center justify-center gap-12 my-12 sm:my-24 lg:my-20 xl:mx-40">
-      <div className="flex flex-col sm:flex-row justify-between mx-6 sm:mx-12">
-        <div className="text-white flex flex-col justify-between sm:w-1/2">
+    <div className="flex flex-col items-center justify-center gap-12 lg:gap-36 my-12 sm:my-24 lg:my-36 xl:mx-40">
+      <div className="flex flex-col sm:flex-row gap-12 sm:gap-8 lg:gap-16 justify-between sm:items-center mx-6 sm:mx-12 lg:mx-40">
+        <div className="text-white flex flex-col justify-between gap-12 sm:gap-12 lg:gap-24 sm:w-1/2">
           <motion.div 
             variants={slideInLeft} 
             initial="hidden" 
@@ -76,10 +75,10 @@ export default function Body() {
             transition={{ duration: 0.8 }} 
             className=" text-left"
           >
-            <h1 className="font-josefin font-semibold text-4xl sm:text-3xl xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {ourGoal}
               </p>
             </div>
@@ -90,11 +89,11 @@ export default function Body() {
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className="text-right mt-12 sm:mt-32"
+            className="text-right mt-0"
           >
-            <h1 className="font-josefin font-semibold text-4xl sm:text-3xl xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
             <div className="mt-4 flex ">
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {weOffer}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />
@@ -107,42 +106,42 @@ export default function Body() {
           whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-          className="mt-6 sm:w-1/2 sm:ml-20 relative h-64 sm:h-[30rem]">
+          className="sm:w-1/2 relative h-64 sm:h-[30rem]">
           <Image
-            src={images[1]?.imageUrl}
+            src={images[0]?.imageUrl}
             layout="fill"
             objectFit="cover"
-            alt={images[1]?.imageAlt}
+            alt={images[0]?.imageAlt}
           />
         </motion.div>
       </div>
-      <div className="flex flex-col-reverse gap-12 sm:gap-0 sm:flex-row justify-between mx-6">
+      <div className="flex flex-col-reverse gap-12 sm:gap-8 lg:gap-16 sm:flex-row justify-between sm:items-center mx-6 sm:mx-12 lg:mx-40">
         <motion.div
           variants={fadeIn} 
           initial="hidden" 
           whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-          className="sm:mr-20 relative h-64 sm:h-[30rem]">
+          className="sm:w-1/2 relative h-64 sm:h-[30rem]">
             <Image
-              src={images[0]?.imageUrl}
+              src={images[1]?.imageUrl}
               layout="fill"
               objectFit="cover"
-              alt={images[0]?.imageAlt}
+              alt={images[1]?.imageAlt}
             />
           </motion.div>
-        <div className="text-white flex flex-col justify-between gap-12">
+        <div className="text-white flex flex-col justify-between gap-12 sm:gap-12 lg:gap-24 sm:w-1/2">
           <motion.div 
             variants={slideInLeft} 
             initial="hidden" 
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className=" text-left sm:mt-12">
-            <h1 className="font-josefin font-semibold text-4xl xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
+            className=" text-left">
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {values}
               </p>
             </div>
@@ -153,11 +152,11 @@ export default function Body() {
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className="text-right sm:mt-32"
+            className="text-right"
             >
-            <h1 className="font-josefin font-semibold text-4xl xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
             <div className="mt-4 flex h-fit ">
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {joinUs}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />

@@ -5,7 +5,7 @@ import { ref, getDownloadURL } from 'firebase/storage';
 export default function Banner() {
     const videoRef = useRef(null);
     const [videoUrl, setVideoUrl] = useState(null);
-    const offset = 1600;
+    const offset = 1400;
 
     useEffect(() => {
         const fetchVideoUrl = async () => {
@@ -45,7 +45,7 @@ export default function Banner() {
     }, []);
 
     return (
-        <div className="w-screen h-[300px] sm:h-[400px] lg:h-[700px] overflow-hidden relative">
+        <div className="w-screen h-[50vw] overflow-hidden relative">
             <video
                 ref={videoRef}
                 src={videoUrl}

@@ -27,7 +27,6 @@ export default function Carousel() {
             console.log("fetching carousel...");
             const querySnapshot = await getDocs(collection(db,'carousel-images'));
             const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
-            console.log("fetched: ", fetchedImages);
             setImages(fetchedImages);
         } catch (err) {
             console.error("big error: ", err);
