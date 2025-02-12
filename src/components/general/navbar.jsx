@@ -61,7 +61,7 @@ export default function Navbar() {
         
         ${isScrolled ? (screenWidth < 768 ? '' : 'bg-opacity-0') : (screenWidth < 768 ? '' : 'bg-default')} 
         
-        ${isMenuOpen ? 'bg-transparent': 'bg-transparent'} 
+        ${isMenuOpen ? '': ''} 
         
         bg-opacity-100 md:hover:bg-default`}
         >
@@ -72,9 +72,9 @@ export default function Navbar() {
                     </Link>
                 </div>
                 
-                <div className={`nav-links md:flex flex-row space-x-4 ${isMenuOpen ? 'fixed top-0 right-0 w-2/3 bg-default text-3xl ml-8 text-white pl-8 md:pl-0 md:text-center h-svh z-30 transform transition-all -translate-x-0 opacity-100' : screenWidth < 768 ? 'fixed top-0 right-0 w-2/3 h-svh bg-default z-30 transform transition-all duration-300 ease-in-out translate-x-full opacity-0' : 'hidden text-xl text-gray-400'}`}>
+                <div className={`nav-links md:flex flex-row space-x-4 ${isMenuOpen ? 'fixed top-0 right-0 w-2/3 bg-default text-3xl text-white pl-8 pt-12 md:pl-0 md:text-center h-svh z-30 transform transition-all -translate-x-0 opacity-100' : screenWidth < 768 ? 'fixed top-0 right-0 pt-8 w-2/3 h-svh bg-default z-30 transform transition-all duration-300 ease-in-out translate-x-full opacity-0' : 'hidden text-xl text-gray-400'}`}>
                     {navItems.map((route, index) => (
-                        <Link href={route.href} key={index} onClick={() => handleActive(route.text)} className={`p-4 font-light ${active == route.text ? 'text-white font-bold' : ''} ${isMenuOpen ? '' : 'hover:scale-110 transition-all duration-200 ease-in-out underline-on-hover hover:text-white hover:-translate-y-1'}`}>
+                        <Link href={route.href} key={index} onClick={() => handleActive(route.text)} className={`p-4 font-light ${active == route.text ? 'text-white font-bold' : ''} ${isMenuOpen ? active == route.text ? 'font-black text-white' : '' : 'hover:scale-110 transition-all duration-200 ease-in-out underline-on-hover hover:text-white hover:-translate-y-1'}`}>
                             <p>{route.text}</p>
                         </Link>
                     ))}
