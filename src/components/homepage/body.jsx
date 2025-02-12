@@ -3,9 +3,13 @@ import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function Body() {
   const [animationTriggered, setAnimationTriggered] = useState(false);
+  const [images,setImages] = useState([]);
+
   const { ref, inView } = useInView({
     threshold: 0.5, // Adjust this threshold as needed
     triggerOnce: true, // This ensures the animation only triggers once
@@ -34,6 +38,25 @@ export default function Body() {
     visible: { opacity: 1 },
   };
 
+  const fetchImages = async () => {
+    try{
+      const querySnapshot = await getDocs(collection(db,'home-images'));
+      const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
+      if(fetchedImages[0].id == 'top'){
+        setImages([fetchedImages[0],fetchedImages[1]]) // [top, bottom]
+      }
+      else{
+        setImages([fetchedImages[1],fetchedImages[0]])
+      }
+    } catch (err){
+      console.error('failed to fetch body: ', err);
+    }
+  }
+
+  useEffect(() => {
+    fetchImages();
+  },[]);
+
   useEffect(() => {
     if (inView && !animationTriggered) {
       setAnimationTriggered(true);
@@ -41,9 +64,9 @@ export default function Body() {
   }, [inView, animationTriggered]);
 
   return (
-    <div className="flex flex-col items-center justify-center my-20 xl:mx-40">
-      <div className="flex justify-between w-3/5 my-24">
-        <div className="text-white flex flex-col justify-between w-1/2">
+    <div className="flex flex-col items-center justify-center gap-12 lg:gap-36 my-12 sm:my-24 lg:my-36 xl:mx-40">
+      <div className="flex flex-col sm:flex-row gap-12 sm:gap-8 lg:gap-16 justify-between sm:items-center mx-6 sm:mx-12 lg:mx-40">
+        <div className="text-white flex flex-col justify-between gap-12 sm:gap-12 lg:gap-24 sm:w-1/2">
           <motion.div 
             variants={slideInLeft} 
             initial="hidden" 
@@ -52,10 +75,10 @@ export default function Body() {
             transition={{ duration: 0.8 }} 
             className=" text-left"
           >
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {ourGoal}
               </p>
             </div>
@@ -66,11 +89,11 @@ export default function Body() {
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className="text-right mt-32"
+            className="text-right mt-0"
           >
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
             <div className="mt-4 flex ">
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {weOffer}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />
@@ -83,31 +106,31 @@ export default function Body() {
           whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-          className="w-1/2 ml-20 relative h-[30rem]">
+          className="sm:w-1/2 relative h-64 sm:h-[30rem]">
           <Image
-            src={image1Path}
+            src={images[0]?.imageUrl}
             layout="fill"
             objectFit="cover"
-            alt="Candid photo"
+            alt={images[0]?.imageAlt}
           />
         </motion.div>
       </div>
-      <div className="flex justify-between w-3/5 my-24">
+      <div className="flex flex-col-reverse gap-12 sm:gap-8 lg:gap-16 sm:flex-row justify-between sm:items-center mx-6 sm:mx-12 lg:mx-40">
         <motion.div
           variants={fadeIn} 
           initial="hidden" 
           whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-          className="w-1/2 mr-20 relative h-[30rem]">
+          className="sm:w-1/2 relative h-64 sm:h-[30rem]">
             <Image
-              src={image2Path}
+              src={images[1]?.imageUrl}
               layout="fill"
               objectFit="cover"
-              alt="Orientation 2023"
+              alt={images[1]?.imageAlt}
             />
           </motion.div>
-        <div className="text-white flex flex-col justify-between w-1/2">
+        <div className="text-white flex flex-col justify-between gap-12 sm:gap-12 lg:gap-24 sm:w-1/2">
           <motion.div 
             variants={slideInLeft} 
             initial="hidden" 
@@ -115,10 +138,10 @@ export default function Body() {
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
             className=" text-left">
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {values}
               </p>
             </div>
@@ -129,11 +152,11 @@ export default function Body() {
             whileInView="visible" 
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
-            className="text-right mt-32"
+            className="text-right"
             >
-            <h1 className="font-josefin font-semibold text-3xl xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
+            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
             <div className="mt-4 flex h-fit ">
-              <p className="font-jost text-wrap font-light text-xl xl:text-lg">
+              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
                 {joinUs}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />

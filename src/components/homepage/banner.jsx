@@ -1,9 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { storage } from '@/lib/firebase';
+import { ref, getDownloadURL } from 'firebase/storage';
 
 export default function Banner() {
     const videoRef = useRef(null);
-    // const screenHeight = window.innerHeight;
-    const offset = 1300;
+    const [videoUrl, setVideoUrl] = useState(null);
+    const offset = 1400;
+
+    useEffect(() => {
+        const fetchVideoUrl = async () => {
+            try {
+                const videoRef = ref(storage, 'parallax-banner/parallax-video.mp4');
+                const url = await getDownloadURL(videoRef);
+                setVideoUrl(url);
+            } catch (error) {
+                console.error('Error fetching parallax video: ', error);
+            }
+        };
+
+        fetchVideoUrl();
+    }, []);
 
     const handleScroll = () => {
         if (videoRef.current) {
@@ -13,20 +29,32 @@ export default function Banner() {
     };
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        let requestId;
+
+        const onScroll = () => {
+            requestId = requestAnimationFrame(handleScroll);
+        };
+
+        window.addEventListener('scroll', onScroll);
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            if (requestId) {
+                cancelAnimationFrame(requestId);
+            }
+        };
     }, []);
 
     return (
-        <div className="w-screen h-[700px] overflow-hidden relative">
+        <div className="w-screen h-[50vw] overflow-hidden relative">
             <video
                 ref={videoRef}
-                src="/videos/csa_picnic4.mp4" // Update this with the actual path to your video
+                src={videoUrl}
                 autoPlay
                 loop
                 muted
-                className="absolute transform h-full w-full"
-                style={{ objectFit: 'cover' }}
+                playsInline
+                className="absolute transform h-screen w-screen object-cover"
+                aria-label="Background video for parallax effect"
             />
             <div className="absolute inset-0 bg-black opacity-30" />
         </div>
