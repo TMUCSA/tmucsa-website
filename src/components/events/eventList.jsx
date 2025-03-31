@@ -29,7 +29,7 @@ const EventList = ({ events }) => {
                                 rel="noopener noreferrer"
                                 className='inline-flex items-center text-blue-600 hover:text-blue-800'
                             >
-                                See More
+                                Details
                                 <FontAwesomeIcon icon={faArrowRight} className='ml-2' />
                             </a>
                         </div>
