@@ -53,7 +53,7 @@ export default function Events() {
 
     const yearButtonClass = "px-4 py-1 transition-all duration-200 hover:bg-transparent ";
     const buttonColor = "bg-[#1F1B3B]";
-    const buttonColorActive = "bg-[#514E63] px-8";
+    const buttonColorActive = "bg-[#3F3C59] px-8";
 
     if(loading){
         return <Loader />;
