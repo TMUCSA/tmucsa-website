@@ -52,6 +52,10 @@ export default function Navbar() {
 
     const handleActive = (str) =>{
         setActive(str);
+        // close the menu if it is open
+        if(isMenuOpen){
+            setIsMenuOpen(false);
+        }
     }
 
     return (

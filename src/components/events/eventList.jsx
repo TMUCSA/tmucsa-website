@@ -82,7 +82,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
                                     </div>
                                 )}
                             </div>
-                            <div className='absolute flex p-4 md:relative md:flex-1 flex-col md:px-12 md:justify-center bg-black bg-opacity-50 hover:bg-opacity-0 md:bg-opacity-0 transition-all duration-200'>
+                            <div className='absolute flex p-4 md:relative md:flex-1 flex-col md:px-12 md:justify-center'>
                                 <h3 className='text-2xl md:text-5xl uppercase font-bold mb-2'>{event.name}</h3>
                                 <p className='hidden md:block text-gray-400 mb-2 text-xl'>{event.description}</p>
                                 <p className='text-sm md:text-lg mb-2'>
@@ -96,7 +96,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
                                         className='inline-flex items-center px-4 py-2 rounded-xl justify-end text-white md:bg-[#1F1B3B] hover:text-[#1F1B3B] md:hover:bg-white transition-all duration-100'
                                     >
                                         Details
-                                        <FontAwesomeIcon icon={faArrowRight} className='ml-2' />
+                                        <FontAwesomeIcon icon={faArrowRight} className='ml-2 md:hidden' />
                                     </a>
                                 </div>
                             </div>
