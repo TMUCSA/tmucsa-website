@@ -1,45 +1,41 @@
-    import React, { useEffect, useState } from 'react'
-    import { format } from 'date-fns';
+import React, { useEffect, useState, useRef } from 'react';
+import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
     const EventList = ({ events }) => {
         const [currentImageIndices, setCurrentImageIndices] = useState(events.map(() => 0));
-        const [isPaused, setIsPaused] = useState(events.map(() => false));
-
+        const intervalRef = useRef(null);
+        const intervalTime = 5000;
+      
         useEffect(() => {
-            setCurrentImageIndices(events.map(() => 0));
-            setIsPaused(events.map(() => false));
+          setCurrentImageIndices(events.map(() => 0));
+      
+          // start fresh interval
+          startInterval();
+          return () => clearInterval(intervalRef.current);
         }, [events]);
-
-        useEffect(() => {
-            const hasMultipleImages = events.some(event => event.imageUrls.length > 1);
-            if (!hasMultipleImages) return;
-
-            const interval = setInterval(() => {
-                setCurrentImageIndices(prevIndicies =>
-                    prevIndicies.map((index,i) => {
-                        if(i >= events.length || isPaused[i]) return index;
-                        const totalImages = events[i].imageUrls.length;
-                        return (index + 1) % totalImages;
-                    })
-                )
-            }, 3000);
-    
-            return () => clearInterval(interval);
-        }, [events]);
-
+      
+        const startInterval = () => {
+          clearInterval(intervalRef.current);
+          intervalRef.current = setInterval(() => {
+            setCurrentImageIndices(prev =>
+              prev.map((idx, i) => {
+                const len = events[i]?.imageUrls.length ?? 0;
+                return len > 1 ? (idx + 1) % len : idx;
+              })
+            );
+          }, intervalTime);
+        };
+      
         const handleDotClick = (eventIndex, imageIndex) => {
-            setCurrentImageIndices(prevIndicies => {
-                const newIndicies = [...prevIndicies];
-                newIndicies[eventIndex] = imageIndex;
-                return newIndicies;
-            });
-            setIsPaused(prevPaused => {
-                const newPaused = [...prevPaused];
-                newPaused[eventIndex] = true;
-                return newPaused;
-            });
+          clearInterval(intervalRef.current);              
+          setCurrentImageIndices(prev => {
+            const next = [...prev];
+            next[eventIndex] = imageIndex;
+            return next;
+          });
+          startInterval();
         };
         
         return (
