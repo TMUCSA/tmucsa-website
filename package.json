@@ -20,7 +20,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-intersection-observer": "^9.8.1",
-    "swiper": "^11.0.7"
+    "swiper": "^11.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.18",
