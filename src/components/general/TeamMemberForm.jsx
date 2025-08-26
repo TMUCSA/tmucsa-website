@@ -6,7 +6,8 @@ export default function TeamMemberForm() {
         name: '',
         program: '',
         role: '',
-        year: ''
+        year: '',
+        url: '',
     });
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -102,7 +103,8 @@ export default function TeamMemberForm() {
                     name: '',
                     program: '',
                     role: '',
-                    year: ''
+                    year: '',
+                    url: '',
                 });
                 setImageFile(null);
                 // Reset file input
@@ -224,6 +226,20 @@ export default function TeamMemberForm() {
                         </option>
                         ))}
                     </select>
+                </div>
+
+                <div>
+                    <label htmlFor="url" className="text-md font-medium text-gray-700">
+                        Profile URL <span className='text-xs'>(optional, link to your social e.g. Instagram, LinkedIn)</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="url"
+                        name="url"
+                        value={formData.url}
+                        onChange={handleInputChange}
+                        className="w-full rounded-md border-gray-600 shadow-lg text-md p-2 bg-gray-100"
+                    />
                 </div>
 
                 <div>
