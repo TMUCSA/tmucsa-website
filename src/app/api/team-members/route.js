@@ -13,6 +13,7 @@ export async function POST(request) {
         const program = formData.get('program');
         const role = formData.get('role');
         const year = formData.get('year');
+        const url = formData.get('url');
         const imageFile = formData.get('image');
 
         // Validate required fields
@@ -63,6 +64,7 @@ export async function POST(request) {
             photoUrl,
             program,
             role,
+            url: url || '',
             year: parseInt(year), // Convert year to number
             createdAt: new Date().toISOString()
         };
