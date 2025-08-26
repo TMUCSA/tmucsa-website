@@ -11,6 +11,27 @@ export default function TeamMemberForm() {
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
+    const [previewUrl, setPreviewUrl] = useState(null);
+
+    const departmentOptions = [
+        'Executives',
+        'Marketing',
+        'Events',
+        'Corporate Relations',
+        'Finance',
+        'Internals'
+    ]
+
+    const roleOptions = {
+        'Executives': ['President', 'Vice President', 'VP Marketing', 'VP Events', 'VP Corporate Relations', 'VP Finance', 'VP Internals'],
+        'Marketing': ['VP Marketing', 'Graphics Director', 'Marketing Associate', 'Graphics Associate', 'Photographer', 'Videographer', 'Web Developer'],
+        'Events': ['VP Events', 'Events Director', 'Events Associate'],
+        'Corporate Relations': ['VP Corporate Relations', 'Corporate Director', 'Corporate Associate'],
+        'Finance': ['VP Finance', 'Finance Director', 'Finance Associate'],
+        'Internals': ['VP Internals', 'Internals Director', 'Internals Associate']
+    }
+
+    const yearOptions = ['1st', '2nd', '3rd', '4th', '5th', '6th'];
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -23,23 +44,23 @@ export default function TeamMemberForm() {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Validate file type
             const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
             if (!allowedTypes.includes(file.type)) {
                 setMessage('Please select a valid image file (JPEG, PNG, or WebP)');
                 return;
             }
-            
-            // Validate file size (max 5MB)
+    
             if (file.size > 5 * 1024 * 1024) {
                 setMessage('Image file size must be less than 5MB');
                 return;
             }
-            
+    
             setImageFile(file);
+            setPreviewUrl(URL.createObjectURL(file)); // 🎉 preview
             setMessage('');
         }
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -95,17 +116,18 @@ export default function TeamMemberForm() {
             setMessage('Network error. Please try again.');
         } finally {
             setLoading(false);
+            setImageFile(null);
+            setPreviewUrl(null);            
         }
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-6 text-center">Add Team Member</h2>
+        <div className="max-w-lg mx-auto bg-gray-200 p-6 rounded-lg shadow-md font-jost">
             
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                        Name *
+                    <label htmlFor="name" className="text-md font-medium text-gray-700">
+                        Full Name
                     </label>
                     <input
                         type="text"
@@ -114,28 +136,13 @@ export default function TeamMemberForm() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="w-full rounded-md border-gray-600 shadow-lg text-md p-2 bg-gray-100"
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="department" className="block text-sm font-medium text-gray-700">
-                        Department *
-                    </label>
-                    <input
-                        type="text"
-                        id="department"
-                        name="department"
-                        value={formData.department}
-                        onChange={handleInputChange}
-                        required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="program" className="block text-sm font-medium text-gray-700">
-                        Program *
+                    <label htmlFor="program" className="text-md font-medium text-gray-700">
+                        Program <span className='text-xs'>(e.g. Business Management, Computer Science)</span>
                     </label>
                     <input
                         type="text"
@@ -144,45 +151,84 @@ export default function TeamMemberForm() {
                         value={formData.program}
                         onChange={handleInputChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="w-full rounded-md border-gray-600 shadow-lg text-md p-2 bg-gray-100"
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                        Role *
+                    <label htmlFor="department" className="text-md font-medium text-gray-700">
+                        Department
                     </label>
-                    <input
-                        type="text"
+                    <select
+                        id="department"
+                        name="department"
+                        value={formData.department}
+                        onChange={(e) => {
+                        handleInputChange(e);
+                        // reset role when department changes
+                        setFormData((prev) => ({ ...prev, role: "" }));
+                        }}
+                        required
+                        className="w-full rounded-md border-gray-600 shadow-lg text-md p-2 bg-gray-100"
+                    >
+                        <option value="">-- Select Department --</option>
+                        {departmentOptions.map((dept) => (
+                        <option key={dept} value={dept}>
+                            {dept}
+                        </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div>
+                    <label htmlFor="role" className="text-md font-medium text-gray-700">
+                        Role
+                    </label>
+                    <select
                         id="role"
                         name="role"
                         value={formData.role}
                         onChange={handleInputChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    />
+                        disabled={!formData.department}
+                        className={`w-full rounded-md border-gray-600 shadow-lg text-md p-2 bg-gray-100 ${
+                        !formData.department ? "cursor-not-allowed bg-gray-300" : ""
+                        }`}
+                    >
+                        <option value="">-- Select Role --</option>
+                        {formData.department &&
+                        roleOptions[formData.department].map((role) => (
+                            <option key={role} value={role}>
+                            {role}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div>
-                    <label htmlFor="year" className="block text-sm font-medium text-gray-700">
-                        Year *
+                    <label htmlFor="year" className="text-md font-medium text-gray-700">
+                        Year
                     </label>
-                    <input
-                        type="number"
+                    <select
                         id="year"
                         name="year"
                         value={formData.year}
                         onChange={handleInputChange}
                         required
-                        min="1"
-                        max="6"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    />
+                        className="w-full rounded-md border-gray-600 shadow-lg text-md p-2 bg-gray-100"
+                    >
+                        <option value="">-- Select Year --</option>
+                        {yearOptions.map((year) => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div>
-                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                        Photo *
+                    <label htmlFor="image" className="text-md font-medium text-gray-700">
+                        Photo
                     </label>
                     <input
                         type="file"
@@ -195,6 +241,17 @@ export default function TeamMemberForm() {
                     <p className="mt-1 text-xs text-gray-500">
                         JPEG, PNG, or WebP. Max file size: 5MB
                     </p>
+                    
+                    {previewUrl && (
+                        <div className="mt-4">
+                            <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                            <img
+                                src={previewUrl}
+                                alt="Preview"
+                                className="max-h-48 rounded-md shadow-md border border-gray-300"
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <button
