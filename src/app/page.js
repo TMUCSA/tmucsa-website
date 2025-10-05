@@ -19,11 +19,12 @@ export default function Home() {
         return () => clearTimeout(timer); // Cleanup on unmount
     }, []);
 
+    if(isLoading){
+        return <Loader />;
+    }
+
     return (
         <main className=' overflow-x-hidden'>
-            {isLoading ? (
-                <Loader /> // Show the loader while loading
-            ) : (
                 <>
                     <Carousel />
                     <Description />
@@ -31,7 +32,6 @@ export default function Home() {
                     <Body />
                     {/* <Actions /> */}
                 </>
-            )}
         </main>
     );
 };
