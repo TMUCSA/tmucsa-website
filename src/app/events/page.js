@@ -1,7 +1,6 @@
 'use client';
 import EventList from '@/components/events/eventList';
 import LatestEvent from '@/components/events/latestEvent';
-import Loader from '@/components/general/loader';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
@@ -10,7 +9,6 @@ export default function Events() {
     const [allEvents, setAllEvents] = useState([]);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [availableYears, setAvailableYears] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchAllEvents = async () => {
@@ -37,10 +35,8 @@ export default function Events() {
                     setSelectedYear(years[0]);
                 }
 
-                setLoading(false);
             } catch (err) {
                 console.error("Error fetching events: ", err);
-                setLoading(false);
             }
         };
 
@@ -54,10 +50,6 @@ export default function Events() {
     const yearButtonClass = "px-4 py-1 transition-all duration-200 hover:bg-transparent ";
     const buttonColor = "bg-[#1F1B3B] text-white";
     const buttonColorActive = "bg-white text-black hover:text-white px-8";
-
-    if(loading){
-        return <Loader />;
-    }  
 
     return (
         <main className=' overflow-x-hidden pt-16 w-screen'>

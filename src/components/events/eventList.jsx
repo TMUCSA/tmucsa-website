@@ -43,7 +43,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
                     {events.map((event,key) => (
                         <div 
                             key={event.id}
-                            className={`flex overflow-hidden shadow-lg h-[60vw] md:h-[30vw] text-white ${key % 2 == 0 ? 'flex-row' : 'flex-row-reverse bg-black'}`}
+                            className={`flex overflow-hidden shadow-lg h-[60vw] md:h-[30vw] border-b-4 border-white text-white ${key % 2 == 0 ? 'flex-row' : 'flex-row-reverse bg-black' }`}
                         >
                             <div className="flex flex-1 relative overflow-hidden">
                                 <div 
