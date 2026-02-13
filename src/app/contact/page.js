@@ -79,7 +79,7 @@ export default function Contact() {
                                 <div className="space-y-1">
                                     <p className="text-gray-300 font-jost">87 Gerrard St E, Toronto, ON M5B 2M2</p>
                                     <p className="text-gray-300 font-jost">Room: EPH 442-D</p>
-                                    <p className="text-gray-300 font-jost text-sm">You can find us at our office on the 4th floor of Eric Palin Hall. We'll often do pick ups and office hours in here.</p>
+                                    <p className="text-gray-300 font-jost text-sm">You can find us at our office on the 4th floor of Eric Palin Hall. We&apos;ll often do pick ups and office hours in here.</p>
                                 </div>
                             </div>
                             
