@@ -1,10 +1,25 @@
 'use client'
-
+import { teamPages, members } from "./teamData";
+import HeroBanner from '@/components/team/heroBanner'
+import ExecutiveSection from '@/components/team/executiveSection'
+import DepartmentSection from '@/components/team/departmentSection'
 export default function Team() {
+
+    const pageData = teamPages.current
+    const departmentSections = Object.entries(pageData.sections)
+        .filter(([, section]) => section?.type === 'department')
+        .sort(([, a], [, b]) => (a?.order ?? 0) - (b?.order ?? 0))
+        .map(([id, department]) => ({ id, department }))
+
     return (
-        <main className=' overflow-x-hidden pt-16 w-screen'>
-            <h1 className='text-4xl text-white font-jost font-bold text-center mt-12'>Meet the Team</h1>
-            <p className='text-center text-white mt-4 text-lg'>We are a group of passionate individuals dedicated to making a difference in our community. Our team is made up of talented and driven individuals who are committed to our mission and values.</p>
+        <main className='overflow-x-hidden lg:pt-16 w-screen'>
+            <HeroBanner heroImageAlt={pageData.heroImageAlt} heroImageUrl={pageData.heroImageUrl} title={pageData.title} yearLabel={pageData.yearLabel} />
+
+            <ExecutiveSection section={pageData.sections.executives} membersById={members} />
+
+            {departmentSections.map(({ id, department }) => (
+                <DepartmentSection key={id} id={id} department={department} />
+            ))}
         </main>
     );
 }
