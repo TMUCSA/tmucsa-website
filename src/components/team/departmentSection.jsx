@@ -15,9 +15,15 @@ function formatOrdinalYear(year) {
 }
 
 function MemberLine({ member }) {
-	const yearText = formatOrdinalYear(member?.year)
+	const yearValue = Number(member?.year)
+	const yearText = formatOrdinalYear(yearValue)
 	const programText = member?.program || ''
-	const yearProgram = yearText && programText ? `${yearText} Year ${programText}` : ''
+	const yearProgram =
+		programText && yearText
+			? `${yearText} Year ${programText}`
+			: programText && yearValue === 0
+				? programText
+				: ''
 
 	return (
 		<div className='leading-tight'>
