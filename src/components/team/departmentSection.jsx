@@ -24,7 +24,7 @@ function MemberLine({ member }) {
 			<div className='text-beige font-josefin text-base'>
             {member?.displayName}
 			{yearProgram ? (
-				<span className='text-white/70 font-josefin italic text-xs font-light mt-0.5 mx-2'>{yearProgram}</span>
+				<span className='text-white/70 font-josefin italic text-xs font-light mt-0.5 ml-2'>{yearProgram}</span>
 			) : null}
             </div>
 		</div>
