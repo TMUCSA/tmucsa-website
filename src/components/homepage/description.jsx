@@ -5,6 +5,9 @@ import { useSiteContent } from '@/components/general/SiteContentProvider';
 
 export default function Description() {
     const content = useSiteContent('home');
+    const headingParts = String(content.descriptionTitle || '').trim().split(/\s+/);
+    const headingLast = headingParts.pop();
+    const headingLead = headingParts.join(' ');
     const [animationTriggered, setAnimationTriggered] = useState(false);
     const { ref, inView } = useInView({
         threshold: 0.5,
@@ -53,7 +56,8 @@ export default function Description() {
                 <motion.div className="font-josefin" variants={itemVariants}>
                     <p className="mb-7 font-jost text-xs tracking-[0.28em] text-beige/60">01 / ABOUT US</p>
                     <motion.h2 className="text-5xl font-semibold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-                        WHAT IS<br /><span className="text-beige">CSA?</span>
+                        {headingLead ? <>{headingLead}<br /></> : null}
+                        <span className="text-beige">{headingLast}</span>
                     </motion.h2>
                 </motion.div>
                 
