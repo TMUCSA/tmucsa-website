@@ -5,10 +5,6 @@ import Body from '@/components/homepage/body';
 
 export default function Home() {
 
-    if(isLoading){
-        return <Loader />;
-    }
-
     return (
         <main className=' overflow-x-hidden'>
             <Carousel />

@@ -1,8 +1,6 @@
 'use client';
 import EventList from '@/components/events/eventList';
 import LatestEvent from '@/components/events/latestEvent';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 
 export default function Events() {
@@ -13,18 +11,17 @@ export default function Events() {
     useEffect(() => {
         const fetchAllEvents = async () => {
             try{
-                const eventsQuery = query(
-                    collection(db, 'events'),
-                    orderBy('date', 'desc')
-                );
-                const querySnapshot = await getDocs(eventsQuery);
-                const eventsData = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const date = data.date.toDate();
+                const response = await fetch('/api/events');
+                if (!response.ok) throw new Error('Unable to load events');
+                const payload = await response.json();
+                const eventsData = payload.events.map(data => {
+                    const date = new Date(data.date);
+                    const images = data.images?.length ? data.images : (data.imageUrls || []).map((url) => ({ url, focalX: 0.5, focalY: 0.5 }))
                     return { 
-                        id: doc.id, 
                         ...data,
-                        date: date
+                        date: date,
+                        images,
+                        imageUrls: images.map((image) => image.url),
                     };
                 });
                 setAllEvents(eventsData);

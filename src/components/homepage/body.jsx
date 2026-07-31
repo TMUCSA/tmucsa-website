@@ -5,8 +5,15 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { db } from '@/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { useSiteContent } from '@/components/general/SiteContentProvider';
+
+function imageAlt(value, fallback) {
+  const text = typeof value === 'string' ? value.trim() : '';
+  return text || fallback;
+}
 
 export default function Body() {
+  const content = useSiteContent('home');
   const [animationTriggered, setAnimationTriggered] = useState(false);
   const [images,setImages] = useState([]);
 
@@ -14,14 +21,6 @@ export default function Body() {
     threshold: 0.5, // Adjust this threshold as needed
     triggerOnce: true, // This ensures the animation only triggers once
   });
-
-  const ourGoal = "To foster an inclusive community where Chinese students can celebrate culture, form lasting connections, and grow together academically and socially through engaging activities and events.";
-  const weOffer = "Vibrant events, from lively parties to cultural celebrations, that create a welcoming space for students to connect and form lasting friendships.";
-  const values = "We prioritize building meaningful student connections while celebrating, representing, and sharing the richness of Chinese culture with our community.";
-  const joinUs = "Dive into a community where culture meets connection. Whether you're looking to make new friends or celebrate Chinese traditions, TMUCSA is your go-to spot to belong and have a great time.";
-
-  const image1Path = "/images/csa-candid.jpg";
-  const image2Path = "/images/orientation-2023.jpg";
 
   const slideInLeft = {
     hidden: { opacity: 0, x: -50 },
@@ -41,13 +40,8 @@ export default function Body() {
   const fetchImages = async () => {
     try{
       const querySnapshot = await getDocs(collection(db,'home-images'));
-      const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
-      if(fetchedImages[0].id == 'top'){
-        setImages([fetchedImages[0],fetchedImages[1]]) // [top, bottom]
-      }
-      else{
-        setImages([fetchedImages[1],fetchedImages[0]])
-      }
+      const fetchedImages = Object.fromEntries(querySnapshot.docs.map(doc => [doc.id, {id: doc.id, ...doc.data() }]));
+      setImages([fetchedImages.top, fetchedImages.bottom])
     } catch (err){
       console.error('failed to fetch body: ', err);
     }
@@ -62,6 +56,9 @@ export default function Body() {
       setAnimationTriggered(true);
     }
   }, [inView, animationTriggered]);
+
+  const topImageUrl = typeof images[0]?.imageUrl === 'string' ? images[0].imageUrl.trim() : '';
+  const bottomImageUrl = typeof images[1]?.imageUrl === 'string' ? images[1].imageUrl.trim() : '';
 
   return (
     <div className="flex flex-col items-center justify-center gap-12 lg:gap-36 my-12 sm:my-24 lg:my-36 xl:mx-40">
@@ -79,7 +76,7 @@ export default function Body() {
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
               <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {ourGoal}
+                {content.ourGoal}
               </p>
             </div>
           </motion.div>
@@ -94,7 +91,7 @@ export default function Body() {
             <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
             <div className="mt-4 flex ">
               <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {weOffer}
+                {content.weOffer}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />
             </div>
@@ -105,14 +102,19 @@ export default function Body() {
           initial="hidden" 
           whileInView="visible" 
             viewport={{once: true}}
-            transition={{ duration: 0.8 }} 
+          transition={{ duration: 0.8 }}
           className="sm:w-1/2 relative h-64 sm:h-[30rem]">
-          <Image
-            src={images[0]?.imageUrl}
-            layout="fill"
-            objectFit="cover"
-            alt={images[0]?.imageAlt}
-          />
+          {topImageUrl ? (
+            <Image
+              src={topImageUrl}
+              fill
+              sizes="(min-width: 640px) 50vw, 100vw"
+              className="object-cover"
+              alt={imageAlt(images[0]?.imageAlt, 'TMUCSA community gathering')}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-white/5" aria-hidden="true" />
+          )}
         </motion.div>
       </div>
       <div className="flex flex-col-reverse gap-12 sm:gap-8 lg:gap-16 sm:flex-row justify-between sm:items-center mx-6 sm:mx-12 lg:mx-40">
@@ -123,12 +125,17 @@ export default function Body() {
             viewport={{once: true}}
             transition={{ duration: 0.8 }} 
           className="sm:w-1/2 relative h-64 sm:h-[30rem]">
-            <Image
-              src={images[1]?.imageUrl}
-              layout="fill"
-              objectFit="cover"
-              alt={images[1]?.imageAlt}
-            />
+            {bottomImageUrl ? (
+              <Image
+                src={bottomImageUrl}
+                fill
+                sizes="(min-width: 640px) 50vw, 100vw"
+                className="object-cover"
+                alt={imageAlt(images[1]?.imageAlt, 'TMUCSA student group activity')}
+              />
+            ) : (
+              <div className="absolute inset-0 bg-white/5" aria-hidden="true" />
+            )}
           </motion.div>
         <div className="text-white flex flex-col justify-between gap-12 sm:gap-12 lg:gap-24 sm:w-1/2">
           <motion.div 
@@ -142,7 +149,7 @@ export default function Body() {
             <div className="mt-4 flex ">
               <div className="bg-white w-[3px] h-20 mr-8" />
               <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {values}
+                {content.values}
               </p>
             </div>
           </motion.div>
@@ -157,7 +164,7 @@ export default function Body() {
             <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
             <div className="mt-4 flex h-fit ">
               <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {joinUs}
+                {content.joinUs}
               </p>
               <div className="bg-white w-[3px] h-20 ml-8" />
             </div>

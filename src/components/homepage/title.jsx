@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useSiteContent } from '@/components/general/SiteContentProvider';
 
 export default function Title() {
+    const content = useSiteContent('home');
     const [showBottomText, setShowBottomText] = useState(false);
 
     const titleVariants = {
@@ -34,7 +36,7 @@ export default function Title() {
                     animate="visible"
                     className="flex items-end justify-between mb-4"
                 >
-                    <h1 className="text-white text-xl font-normal sm:text-3xl sm:font-bold lg:text-4xl">WHO ARE WE?</h1>
+                    <h1 className="text-white text-xl font-normal sm:text-3xl sm:font-bold lg:text-4xl">{content.heroEyebrow}</h1>
                     <div className="bg-white h-[1px] w-1/3 sm:w-1/2" />
                 </motion.div>
                 <motion.h1
@@ -44,21 +46,21 @@ export default function Title() {
                     animate="visible"
                 >
                     <div className="mb-2">
-                        {Array.from("TORONTO MET").map((letter, index) => (
+                        {Array.from(content.heroLineOne).map((letter, index) => (
                             <motion.span key={index} variants={letterVariants} className="text-white inline-block">
                                 {letter === ' ' ? '\u00A0' : letter}
                             </motion.span>
                         ))}
                     </div>
                     <div className="mb-2">
-                        {Array.from("CHINESE STUDENT").map((letter, index) => (
+                        {Array.from(content.heroLineTwo).map((letter, index) => (
                             <motion.span key={index} variants={letterVariants} className="inline-block">
                                 {letter === ' ' ? '\u00A0' : letter}
                             </motion.span>
                         ))}
                     </div>
                     <div>
-                        {Array.from("ASSOCIATION").map((letter, index) => (
+                        {Array.from(content.heroLineThree).map((letter, index) => (
                             <motion.span key={index} variants={letterVariants} className="inline-block">
                                 {letter === ' ' ? '\u00A0' : letter}
                             </motion.span>
@@ -73,7 +75,7 @@ export default function Title() {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1, delay: 1.4 }}
                     >
-                        CELEBRATING CULTURE | BUILDING CONNECTIONS | HAVING FUN
+                        {content.heroTagline}
                     </motion.h1>
                 )}
             </div>

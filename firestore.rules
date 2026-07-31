@@ -1,0 +1,54 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public website data. All mutations are performed by the authenticated
+    // Next.js server through Firebase Admin, which bypasses these client rules.
+    match /events/{eventId} {
+      // Events are served by /api/events so drafts and archives never leave
+      // the trusted server, even if someone calls Firestore directly.
+      allow read: if false;
+      allow write: if false;
+    }
+
+    match /members/{memberId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /teamPages/{pageId} {
+      allow read: if true;
+      allow write: if false;
+
+      match /{nestedDocument=**} {
+        allow read: if true;
+        allow write: if false;
+      }
+    }
+
+    match /carousel-images/{imageId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /home-images/{imageId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /contact-images/{imageId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /siteContent/{sectionId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // auditLogs and any future collections are private by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

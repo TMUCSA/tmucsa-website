@@ -42,6 +42,12 @@ npm run dev
 localhost:3000
 ```
 
+## Admin workspace
+
+Approved TMUCSA administrators can manage events, team data, homepage media, and website copy from `/admin`.
+
+See [docs/ADMIN_GUIDE.md](docs/ADMIN_GUIDE.md) for local setup, Firebase rules, testing, and Vercel deployment instructions.
+
 ## Coding
 - Code in your respective or assigned branches to avoid git conflicts.
 - Ensure to pull regularly to stay up to date with the dev branch.
@@ -53,4 +59,3 @@ TBD
 
 ## Developers 
 | [@andrearcaina](https://github.com/andrearcaina) | [@chen-dominic](https://github.com/chen-dominic) | [@Tristanv0](https://github.com/Tristanv0) |
-

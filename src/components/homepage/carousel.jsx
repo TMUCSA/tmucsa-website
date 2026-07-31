@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+import 'swiper/css';
 import Title from './title';
 import Image from "next/legacy/image";
 import { collection, getDocs } from 'firebase/firestore';
@@ -26,7 +26,7 @@ export default function Carousel() {
         try{
             console.log("fetching carousel...");
             const querySnapshot = await getDocs(collection(db,'carousel-images'));
-            const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
+            const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() })).sort((a, b) => (a.order || 0) - (b.order || 0));
             setImages(fetchedImages);
         } catch (err) {
             console.error("big error: ", err);
