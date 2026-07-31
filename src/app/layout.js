@@ -1,5 +1,7 @@
-import { Navbar, Footer } from '@/components';
+/* eslint-disable @next/next/no-page-custom-font */
+// The two project fonts are loaded once in the App Router root layout.
 import './globals.css';
+import SiteChrome from '@/components/general/siteChrome';
 
 export const metadata = {
   title: 'TMUCSA',
@@ -19,9 +21,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="font-sans bg-default overflow-x-hidden">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   )

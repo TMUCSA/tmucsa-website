@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { db } from '@/lib/firebase';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -11,15 +9,17 @@ const LatestEvent = () => {
     useEffect(() => {
         const fetchLatestEvent = async () => {
             try{
-                const eventsQuery = query(collection(db, 'events'), orderBy('date', 'desc'), limit(1));
-                const querySnapshot = await getDocs(eventsQuery);
-                const eventData = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const date = data.date.toDate();
+                const response = await fetch('/api/events');
+                if (!response.ok) throw new Error('Unable to load events');
+                const payload = await response.json();
+                const eventData = payload.events.map(data => {
+                    const date = new Date(data.date);
+                    const images = data.images?.length ? data.images : (data.imageUrls || []).map((url) => ({ url, focalX: 0.5, focalY: 0.5 }))
                     return { 
-                        id: doc.id, 
                         ...data,
-                        date: date
+                        date: date,
+                        images,
+                        imageUrls: images.map((image) => image.url),
                     };
                 });
 
@@ -42,7 +42,8 @@ const LatestEvent = () => {
         <div 
             className='w-screen h-[80vh] max-h-[100vw] relative bg-cover bg-center text-white font-jost'
             style={{ 
-                backgroundImage: `url(${latestEvent.imageUrls[0]})`
+                backgroundImage: `url(${latestEvent.images[0]?.url})`,
+                backgroundPosition: `${(latestEvent.images[0]?.focalX ?? 0.5) * 100}% ${(latestEvent.images[0]?.focalY ?? 0.5) * 100}%`,
             }}
         >
             <div className='absolute inset-0 bg-black bg-opacity-40'></div>

@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
+import { useSiteContent } from './SiteContentProvider';
 
 export default function Navbar() {
-    const [navItems, setNavItems] = useState([]);
+    const { navItems } = useSiteContent('global');
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(0);
     const [active,setActive] = useState('Home');
 
     useEffect(() => {
-        fetchData();
         handleScroll();
         handleResize();
     
@@ -25,16 +25,6 @@ export default function Navbar() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
-
-    const fetchData = async () => {
-        try {
-            const response = await fetch('/data/nav-items.json');
-            const data = await response.json();
-            setNavItems(data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
     const handleScroll = async () => {
         const scrollTop = window.scrollY;

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useSiteContent } from '@/components/general/SiteContentProvider';
 
 export default function Description() {
+    const content = useSiteContent('home');
     const [animationTriggered, setAnimationTriggered] = useState(false);
     const { ref, inView } = useInView({
         threshold: 0.5,
@@ -36,8 +38,6 @@ export default function Description() {
         }
     }, [inView, animationTriggered]);
 
-    const description = "We are a dynamic community that brings together Chinese students from various backgrounds to foster cultural exchange, academic growth, and social connections. We provide a welcoming space for students to explore their cultural identity, engage in meaningful activities, and build lifelong friendships.";
-
     return (
         <div 
             ref={ref}
@@ -51,14 +51,14 @@ export default function Description() {
             >
                 <motion.div className="font-josefin flex flex-col items-center justify-center" variants={itemVariants}>
                     <motion.h2 className="text-2xl sm:text-3xl sm:font-bold lg:text-5xl font-semibold">
-                        WHAT IS <span className="text-beige">CSA</span>?
+                        {content.descriptionTitle}
                     </motion.h2>
                     
                     <motion.hr className="border-white w-1/2 sm:w-3/4 my-4" />
                 </motion.div>
                 
                 <motion.p className="font-jost text-xl lg:text-3xl tracking-wide font-light text-left" variants={itemVariants}>
-                    {description}
+                    {content.description}
                 </motion.p>
             </motion.div>
         </div>

@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+/* eslint-disable @next/next/no-img-element */
+// Keep the pre-optimized event images native for predictable slideshow crop behavior.
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -8,25 +10,23 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
         const intervalRef = useRef(null);
         const intervalTime = 5000;
       
-        useEffect(() => {
-          setCurrentImageIndices(events.map(() => 0));
-      
-          // start fresh interval
-          startInterval();
-          return () => clearInterval(intervalRef.current);
-        }, [events]);
-      
-        const startInterval = () => {
+        const startInterval = useCallback(() => {
           clearInterval(intervalRef.current);
           intervalRef.current = setInterval(() => {
             setCurrentImageIndices(prev =>
               prev.map((idx, i) => {
-                const len = events[i]?.imageUrls.length ?? 0;
+                const len = events[i]?.images?.length ?? events[i]?.imageUrls?.length ?? 0;
                 return len > 1 ? (idx + 1) % len : idx;
               })
             );
           }, intervalTime);
-        };
+        }, [events]);
+
+        useEffect(() => {
+          setCurrentImageIndices(events.map(() => 0));
+          startInterval();
+          return () => clearInterval(intervalRef.current);
+        }, [events, startInterval]);
       
         const handleDotClick = (eventIndex, imageIndex) => {
           clearInterval(intervalRef.current);              
@@ -45,26 +45,20 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
                             key={event.id}
                             className={`flex overflow-hidden shadow-lg h-[60vw] md:h-[30vw] border-b-4 border-white text-white ${key % 2 == 0 ? 'flex-row' : 'flex-row-reverse bg-black' }`}
                         >
-                            <div className="flex flex-1 relative overflow-hidden">
-                                <div 
-                                className="flex transition-transform duration-500 ease-in-out h-full"
-                                style={{ 
-                                    transform: `translateX(-${currentImageIndices[key] * 100}%)`,
-                                    width: `${event.imageUrls.length * 100}%`
-                                }}
-                            >
-                                {event.imageUrls.map((url, index) => (
+                            <div className="flex flex-1 relative overflow-hidden bg-black">
+                                {(event.images || event.imageUrls.map((url) => ({ url }))).map((image, index) => (
                                     <img 
                                         key={index}
-                                        src={url} 
-                                        alt={`${event.name} - Image ${index + 1}`}
-                                        className='w-full h-full object-cover flex-shrink-0'
+                                        src={image.url}
+                                        alt={image.alt || `${event.name} - Image ${index + 1}`}
+                                        loading={key === 0 && index === 0 ? 'eager' : 'lazy'}
+                                        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${currentImageIndices[key] === index ? 'opacity-100' : 'opacity-0'}`}
+                                        style={{ objectPosition: `${(image.focalX ?? 0.5) * 100}% ${(image.focalY ?? 0.5) * 100}%` }}
                                     />
                                 ))}
-                            </div>
-                                {event.imageUrls.length > 1 && (
+                                {(event.images?.length || event.imageUrls.length) > 1 && (
                                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2  bg-black bg-opacity-50 px-2 py-1 rounded-xl md:p-0 md:bg-opacity-0">
-                                        {event.imageUrls.map((_, index) => (
+                                        {(event.images || event.imageUrls).map((_, index) => (
                                             <button
                                                 key={index}
                                                 onClick={() => handleDotClick(key, index)}
