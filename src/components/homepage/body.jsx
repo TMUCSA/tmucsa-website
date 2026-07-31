@@ -5,23 +5,18 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { db } from '@/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { useSiteContent } from '@/components/general/SiteContentProvider';
+
+function imageAlt(value, fallback) {
+  const text = typeof value === 'string' ? value.trim() : '';
+  return text || fallback;
+}
 
 export default function Body() {
-  const [animationTriggered, setAnimationTriggered] = useState(false);
+  const content = useSiteContent('home');
   const [images,setImages] = useState([]);
 
-  const { ref, inView } = useInView({
-    threshold: 0.5, // Adjust this threshold as needed
-    triggerOnce: true, // This ensures the animation only triggers once
-  });
-
-  const ourGoal = "To foster an inclusive community where Chinese students can celebrate culture, form lasting connections, and grow together academically and socially through engaging activities and events.";
-  const weOffer = "Vibrant events, from lively parties to cultural celebrations, that create a welcoming space for students to connect and form lasting friendships.";
-  const values = "We prioritize building meaningful student connections while celebrating, representing, and sharing the richness of Chinese culture with our community.";
-  const joinUs = "Dive into a community where culture meets connection. Whether you're looking to make new friends or celebrate Chinese traditions, TMUCSA is your go-to spot to belong and have a great time.";
-
-  const image1Path = "/images/csa-candid.jpg";
-  const image2Path = "/images/orientation-2023.jpg";
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
 
   const slideInLeft = {
     hidden: { opacity: 0, x: -50 },
@@ -41,13 +36,8 @@ export default function Body() {
   const fetchImages = async () => {
     try{
       const querySnapshot = await getDocs(collection(db,'home-images'));
-      const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
-      if(fetchedImages[0].id == 'top'){
-        setImages([fetchedImages[0],fetchedImages[1]]) // [top, bottom]
-      }
-      else{
-        setImages([fetchedImages[1],fetchedImages[0]])
-      }
+      const fetchedImages = Object.fromEntries(querySnapshot.docs.map(doc => [doc.id, {id: doc.id, ...doc.data() }]));
+      setImages([fetchedImages.top, fetchedImages.bottom])
     } catch (err){
       console.error('failed to fetch body: ', err);
     }
@@ -57,113 +47,58 @@ export default function Body() {
     fetchImages();
   },[]);
 
-  useEffect(() => {
-    if (inView && !animationTriggered) {
-      setAnimationTriggered(true);
-    }
-  }, [inView, animationTriggered]);
+  const topImageUrl = typeof images[0]?.imageUrl === 'string' ? images[0].imageUrl.trim() : '';
+  const bottomImageUrl = typeof images[1]?.imageUrl === 'string' ? images[1].imageUrl.trim() : '';
+
+  const statements = [
+    { number: '01', title: 'OUR GOAL', text: content.ourGoal },
+    { number: '02', title: 'WHAT WE OFFER', text: content.weOffer },
+    { number: '03', title: 'OUR VALUES', text: content.values },
+    { number: '04', title: 'JOIN US', text: content.joinUs },
+  ];
 
   return (
-    <div className="flex flex-col items-center justify-center gap-12 lg:gap-36 my-12 sm:my-24 lg:my-36 xl:mx-40">
-      <div className="flex flex-col sm:flex-row gap-12 sm:gap-8 lg:gap-16 justify-between sm:items-center mx-6 sm:mx-12 lg:mx-40">
-        <div className="text-white flex flex-col justify-between gap-12 sm:gap-12 lg:gap-24 sm:w-1/2">
-          <motion.div 
-            variants={slideInLeft} 
-            initial="hidden" 
-            whileInView= "visible"
-            viewport={{once: true}}
-            transition={{ duration: 0.8 }} 
-            className=" text-left"
-          >
-            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">OUR <span className="text-beige">GOAL</span></h1>
-            <div className="mt-4 flex ">
-              <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {ourGoal}
-              </p>
-            </div>
+    <section ref={ref} className="relative overflow-hidden bg-[#0E0C24] py-24 text-white sm:py-32 lg:py-40">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 xl:px-24">
+        <div className="mb-14 flex flex-col justify-between gap-6 border-b border-white/15 pb-8 sm:flex-row sm:items-end lg:mb-20">
+          <div>
+            <p className="font-jost text-xs tracking-[0.28em] text-beige/60">02 / OUR COMMUNITY</p>
+            <h2 className="mt-5 font-josefin text-4xl font-semibold tracking-tight sm:text-6xl">WHAT DRIVES US</h2>
+          </div>
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+          <motion.div variants={fadeIn} initial="hidden" animate={inView ? 'visible' : 'hidden'} transition={{ duration: 0.8 }} className="relative aspect-[4/3] overflow-hidden lg:row-span-2 lg:aspect-auto lg:min-h-[680px]">
+            {topImageUrl ? <Image src={topImageUrl} fill sizes="(min-width: 1024px) 48vw, 100vw" className="object-cover" alt={imageAlt(images[0]?.imageAlt, 'TMUCSA community gathering')} /> : <div className="absolute inset-0 bg-white/5" aria-hidden="true" />}
+            <div className="absolute inset-0 bg-gradient-to-t from-default/65 via-transparent to-transparent" />
+            <p className="absolute bottom-5 left-5 font-jost text-[10px] uppercase tracking-[0.28em] text-white/65 sm:bottom-7 sm:left-7">Culture · Community · Connection</p>
           </motion.div>
-          <motion.div 
-            variants={slideInRight} 
-            initial="hidden" 
-            whileInView="visible" 
-            viewport={{once: true}}
-            transition={{ duration: 0.8 }} 
-            className="text-right mt-0"
-          >
-            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">WHAT WE <span className="text-navy">OFFER</span></h1>
-            <div className="mt-4 flex ">
-              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {weOffer}
-              </p>
-              <div className="bg-white w-[3px] h-20 ml-8" />
-            </div>
+
+          <div className="grid border-t border-white/15 sm:grid-cols-2">
+            {statements.slice(0, 2).map((statement, index) => (
+              <motion.article key={statement.number} variants={index === 0 ? slideInRight : slideInLeft} initial="hidden" animate={inView ? 'visible' : 'hidden'} transition={{ duration: 0.65, delay: index * 0.1 }} className="border-b border-white/15 py-8 sm:px-7 sm:first:border-r sm:first:pl-0">
+                <p className="font-jost text-xs tracking-[0.25em] text-beige/50">{statement.number}</p>
+                <h3 className="mt-8 font-josefin text-2xl font-semibold">{statement.title}</h3>
+                <p className="mt-4 font-jost font-light leading-7 text-white/60">{statement.text}</p>
+              </motion.article>
+            ))}
+          </div>
+
+          <motion.div variants={fadeIn} initial="hidden" animate={inView ? 'visible' : 'hidden'} transition={{ duration: 0.8, delay: 0.15 }} className="relative aspect-[16/9] overflow-hidden">
+            {bottomImageUrl ? <Image src={bottomImageUrl} fill sizes="(min-width: 1024px) 48vw, 100vw" className="object-cover" alt={imageAlt(images[1]?.imageAlt, 'TMUCSA student group activity')} /> : <div className="absolute inset-0 bg-white/5" aria-hidden="true" />}
           </motion.div>
         </div>
-        <motion.div 
-          variants={fadeIn} 
-          initial="hidden" 
-          whileInView="visible" 
-            viewport={{once: true}}
-            transition={{ duration: 0.8 }} 
-          className="sm:w-1/2 relative h-64 sm:h-[30rem]">
-          <Image
-            src={images[0]?.imageUrl}
-            layout="fill"
-            objectFit="cover"
-            alt={images[0]?.imageAlt}
-          />
-        </motion.div>
-      </div>
-      <div className="flex flex-col-reverse gap-12 sm:gap-8 lg:gap-16 sm:flex-row justify-between sm:items-center mx-6 sm:mx-12 lg:mx-40">
-        <motion.div
-          variants={fadeIn} 
-          initial="hidden" 
-          whileInView="visible" 
-            viewport={{once: true}}
-            transition={{ duration: 0.8 }} 
-          className="sm:w-1/2 relative h-64 sm:h-[30rem]">
-            <Image
-              src={images[1]?.imageUrl}
-              layout="fill"
-              objectFit="cover"
-              alt={images[1]?.imageAlt}
-            />
-          </motion.div>
-        <div className="text-white flex flex-col justify-between gap-12 sm:gap-12 lg:gap-24 sm:w-1/2">
-          <motion.div 
-            variants={slideInLeft} 
-            initial="hidden" 
-            whileInView="visible" 
-            viewport={{once: true}}
-            transition={{ duration: 0.8 }} 
-            className=" text-left">
-            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl">OUR <span className="text-beige">VALUES</span></h1>
-            <div className="mt-4 flex ">
-              <div className="bg-white w-[3px] h-20 mr-8" />
-              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {values}
-              </p>
-            </div>
-          </motion.div>
-          <motion.div 
-            variants={slideInRight} 
-            initial="hidden" 
-            whileInView="visible" 
-            viewport={{once: true}}
-            transition={{ duration: 0.8 }} 
-            className="text-right"
-            >
-            <h1 className="font-josefin font-semibold text-4xl lg:text-4xl lg:font-bold xl:text-2xl"><span className="text-navy">JOIN</span> US</h1>
-            <div className="mt-4 flex h-fit ">
-              <p className="font-jost text-wrap font-light text-xl lg:text-2xl xl:text-lg">
-                {joinUs}
-              </p>
-              <div className="bg-white w-[3px] h-20 ml-8" />
-            </div>
-          </motion.div>
+
+        <div className="mt-8 grid border-t border-white/15 sm:grid-cols-2 lg:ml-[calc(50%+1.25rem)]">
+          {statements.slice(2).map((statement, index) => (
+            <motion.article key={statement.number} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }} transition={{ duration: 0.65, delay: 0.2 + index * 0.1 }} className="border-b border-white/15 py-8 sm:px-7 sm:first:border-r sm:first:pl-0">
+              <p className="font-jost text-xs tracking-[0.25em] text-beige/50">{statement.number}</p>
+              <h3 className="mt-8 font-josefin text-2xl font-semibold">{statement.title}</h3>
+              <p className="mt-4 font-jost font-light leading-7 text-white/60">{statement.text}</p>
+            </motion.article>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   )
 }

@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+// The retired form still supports a local object-URL preview.
 import { useState } from 'react';
 
 export default function TeamMemberForm() {

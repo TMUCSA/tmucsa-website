@@ -1,5 +1,5 @@
 'use client';
-import { Carousel, Description, Follow } from '@/components';
+import { Carousel, Description } from '@/components';
 import Banner from '@/components/homepage/banner';
 import Body from '@/components/homepage/body';
 

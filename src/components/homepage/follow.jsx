@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+import 'swiper/css';
+import 'swiper/css/pagination';
 import Link from 'next/link';
 import Image from 'next/legacy/image';
 

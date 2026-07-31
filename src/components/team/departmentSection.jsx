@@ -1,5 +1,7 @@
 'use client'
 
+/* eslint-disable @next/next/no-img-element */
+// Native dimensions preserve each uploaded team photo's natural aspect ratio.
 import Image from 'next/image'
 
 function formatOrdinalYear(year) {

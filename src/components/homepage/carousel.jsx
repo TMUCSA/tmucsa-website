@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+import 'swiper/css';
 import Title from './title';
-import Image from "next/legacy/image";
+import Image from 'next/image';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -26,7 +26,7 @@ export default function Carousel() {
         try{
             console.log("fetching carousel...");
             const querySnapshot = await getDocs(collection(db,'carousel-images'));
-            const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
+            const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() })).sort((a, b) => (a.order || 0) - (b.order || 0));
             setImages(fetchedImages);
         } catch (err) {
             console.error("big error: ", err);
@@ -35,7 +35,7 @@ export default function Carousel() {
     };
 
     return (
-        <div className="relative -translate-y-12">
+        <section className="relative min-h-[720px] h-[100svh] overflow-hidden bg-default">
             <Title/>
             
             <Swiper
@@ -43,37 +43,25 @@ export default function Carousel() {
                 slidesPerView={1}
                 autoplay={{ delay: 2500 }}
                 loop={images.length > 1 ? true : false}
-                className="h-[100vw] md:h-screen mt-12 relative overflow-hidden"
+                className="absolute inset-0 h-full w-full"
             >
-                {/* {images.map((image, index) => (
-                    <SwiperSlide key={index} className="swiper-slide relative">
-                        <Image
-                            src={image.path}
-                            alt={image.alt}
-                            layout='fill'
-                            priority={true}
-                            className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center object-cover"
-                        />
-                        <div className="absolute h-full inset-x-0 bottom-0 bg-gradient-to-t from-default to-transparent z-[1]" />
-
-                    </SwiperSlide>
-                ))} */}
                 {images.map(image => (
                     <SwiperSlide key={image.id} className="swiper-slide relative">
                         <Image
                             src={image.imageUrl}
-                            alt={image.imageAlt}
-                            layout='fill'
-                            priority={true}
-                            className="absolute inset-0 z-[-1] bg-fixed bg-cover bg-center object-cover"
+                            alt={image.imageAlt || 'TMUCSA community event'}
+                            fill
+                            priority
+                            sizes="100vw"
+                            className="object-cover"
                         />
-                        {/* Adding gradient overlay */}
-                        <div className="absolute h-full inset-x-0 -bottom-1 bg-gradient-to-t from-default to-transparent z-[1]" />
+                        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-default/90 via-default/30 to-transparent" />
+                        <div className="absolute inset-0 z-[1] bg-gradient-to-t from-default via-transparent to-default/20" />
 
                     </SwiperSlide>
                 ))}
             </Swiper>
-
-        </div>
+            <div className="pointer-events-none absolute inset-x-6 bottom-8 z-20 h-px bg-white/15 sm:inset-x-10 lg:inset-x-16 xl:inset-x-24" aria-hidden="true" />
+        </section>
     );
 }
