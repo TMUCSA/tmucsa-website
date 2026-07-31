@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Loader from '../general/loader';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { format } from 'date-fns';
@@ -8,7 +7,6 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const LatestEvent = () => {
     const [latestEvent, setLatestEvents] = useState(null);
-    const [loading, setLoading] = useState(true);
   
     useEffect(() => {
         const fetchLatestEvent = async () => {
@@ -28,19 +26,13 @@ const LatestEvent = () => {
                 if(eventData.length > 0) {
                     setLatestEvents(eventData[0]);
                 }
-                setLoading(false);
             } catch(err) {
                 console.error("Error fetching latest event: ", err);
-                setLoading(false);
             }
         };
 
         fetchLatestEvent();
     },[]);
-
-    if(loading){
-        return <Loader />;
-    }  
 
     if (!latestEvent) {
         return <div>No events found</div>;

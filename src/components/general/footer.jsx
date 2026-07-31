@@ -24,7 +24,7 @@ export default function Footer() {
                     </Link>
                 </div>
                 <div className="text-center font-thin w-full text-xs lg:text-md lg:tracking-wider text-gray-100">
-                    <p>© 2024 TMUCSA (Toronto Metropolitan Chinese Student Association) | All rights reserved.</p>
+                    <p>© 2025 TMUCSA (Toronto Metropolitan Chinese Student Association) | All rights reserved.</p>
                 </div>
             </div>
         </footer>
