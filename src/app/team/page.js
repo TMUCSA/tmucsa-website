@@ -80,13 +80,13 @@ export default function Team() {
         .map(([id, department]) => ({ id, department }))
 
     return (
-        <main className='overflow-x-hidden lg:pt-16 w-screen'>
+        <main className='overflow-x-hidden bg-default'>
             <HeroBanner heroImageAlt={pageData.heroImageAlt} heroImageUrl={pageData.heroImageUrl} title={pageData.title} yearLabel={pageData.yearLabel} />
 
             {availablePages.length > 1 ? (
-                <nav className='flex flex-wrap items-center justify-center gap-2 border-y border-white/10 bg-default px-4 py-5 font-josefin' aria-label='Team years'>
+                <nav className='flex flex-wrap items-center justify-center gap-2 border-y border-white/10 bg-[#0E0C24] px-4 py-6 font-josefin' aria-label='Team years'>
                     {availablePages.map((teamPage) => (
-                        <button key={teamPage.id} onClick={() => setSelectedPageId(teamPage.id)} className={`rounded-full px-5 py-2 text-sm tracking-wider transition ${selectedPageId === teamPage.id ? 'bg-beige text-default' : 'border border-white/15 text-white/60 hover:border-beige/60 hover:text-white'}`}>
+                        <button key={teamPage.id} onClick={() => setSelectedPageId(teamPage.id)} className={`border px-5 py-2 text-sm tracking-wider transition ${selectedPageId === teamPage.id ? 'border-beige bg-beige text-default' : 'border-white/15 text-white/60 hover:border-beige/60 hover:text-white'}`}>
                             {teamPage.yearLabel}
                         </button>
                     ))}

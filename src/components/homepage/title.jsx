@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useSiteContent } from '@/components/general/SiteContentProvider';
 
 export default function Title() {
     const content = useSiteContent('home');
-    const [showBottomText, setShowBottomText] = useState(false);
-
     const titleVariants = {
         hidden: { opacity: 0, y: -20 },
         visible: {
             opacity: 1,
             y: 0,
             transition: {
-                staggerChildren: 0.04,
-                // Trigger the bottom text after the first animation completes
-                onComplete: () => setShowBottomText(true),
+                staggerChildren: 0.025,
             },
         },
     };
@@ -27,57 +23,56 @@ export default function Title() {
         },
     };
 
+    const AnimatedLine = ({ children, className = '' }) => (
+        <div className={`whitespace-nowrap ${className}`}>
+            {Array.from(children).map((letter, index) => (
+                <motion.span key={index} variants={letterVariants} className="inline-block">
+                    {letter === ' ' ? '\u00A0' : letter}
+                </motion.span>
+            ))}
+        </div>
+    );
+
     return (
-        <div className="absolute inset-0 flex items-end justify-center z-10 font-josefin mx-6">
-            <div className="flex flex-col">
+        <div className="absolute inset-0 z-10 mx-auto flex max-w-[1440px] items-end px-6 pb-20 pt-32 font-josefin sm:px-10 sm:pb-24 lg:px-16 xl:px-24">
+            <div className="w-full max-w-6xl">
                 <motion.div
                     variants={titleVariants}
                     initial="hidden"
                     animate="visible"
-                    className="flex items-end justify-between mb-4"
+                    className="mb-7 flex items-center gap-4 font-jost text-[11px] tracking-[0.28em] text-white/65 sm:text-xs"
                 >
-                    <h1 className="text-white text-xl font-normal sm:text-3xl sm:font-bold lg:text-4xl">{content.heroEyebrow}</h1>
-                    <div className="bg-white h-[1px] w-1/3 sm:w-1/2" />
+                    <span>{content.heroEyebrow}</span>
+                    <span className="h-px w-14 bg-beige/70" />
                 </motion.div>
                 <motion.h1
-                    className="text-beige text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-left tracking-wider"
+                    className="font-bold uppercase leading-[0.84] tracking-[-0.05em] text-beige"
                     variants={titleVariants}
                     initial="hidden"
                     animate="visible"
                 >
-                    <div className="mb-2">
-                        {Array.from(content.heroLineOne).map((letter, index) => (
-                            <motion.span key={index} variants={letterVariants} className="text-white inline-block">
-                                {letter === ' ' ? '\u00A0' : letter}
-                            </motion.span>
-                        ))}
+                    <div className="text-[clamp(2.35rem,10.5vw,3.25rem)] sm:hidden">
+                        <AnimatedLine className="text-white">{content.heroLineOne}</AnimatedLine>
+                        <AnimatedLine>CHINESE</AnimatedLine>
+                        <AnimatedLine>STUDENT</AnimatedLine>
+                        <AnimatedLine>{content.heroLineThree}</AnimatedLine>
                     </div>
-                    <div className="mb-2">
-                        {Array.from(content.heroLineTwo).map((letter, index) => (
-                            <motion.span key={index} variants={letterVariants} className="inline-block">
-                                {letter === ' ' ? '\u00A0' : letter}
-                            </motion.span>
-                        ))}
-                    </div>
-                    <div>
-                        {Array.from(content.heroLineThree).map((letter, index) => (
-                            <motion.span key={index} variants={letterVariants} className="inline-block">
-                                {letter === ' ' ? '\u00A0' : letter}
-                            </motion.span>
-                        ))}
+                    <div className="hidden text-[clamp(3.25rem,6.4vw,6.75rem)] sm:block">
+                        <AnimatedLine className="text-white">{content.heroLineOne}</AnimatedLine>
+                        <AnimatedLine>{content.heroLineTwo}</AnimatedLine>
+                        <AnimatedLine>{content.heroLineThree}</AnimatedLine>
                     </div>
                 </motion.h1>
                 
-                {showBottomText && (
-                    <motion.h1 
-                        className="text-white text-lg text-center mt-2 sm:flex hidden lg:text-2xl"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 1.4 }}
-                    >
-                        {content.heroTagline}
-                    </motion.h1>
-                )}
+                <motion.div
+                    className="mt-8 flex max-w-2xl items-start gap-4 font-jost text-sm font-light uppercase tracking-[0.16em] text-white/70 sm:text-base"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, delay: 0.9 }}
+                >
+                    <span className="mt-2 h-px w-10 shrink-0 bg-beige" />
+                    <p>{content.heroTagline}</p>
+                </motion.div>
             </div>
         </div>
     );

@@ -39,28 +39,29 @@ export default function Description() {
     }, [inView, animationTriggered]);
 
     return (
-        <div 
+        <section
             ref={ref}
-            className="py-12 sm:py-24 lg:py-40 flex justify-center items-center text-white"
+            className="relative overflow-hidden border-b border-white/10 bg-default py-24 text-white sm:py-32 lg:py-40"
         >
+            <div className="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full bg-navy/15 blur-[120px]" aria-hidden="true" />
             <motion.div
-                className="flex flex-col justify-center items-center mx-8 sm:mx-12 lg:mx-40 "
+                className="relative mx-auto grid max-w-[1440px] gap-10 px-6 sm:px-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20 lg:px-16 xl:px-24"
                 variants={containerVariants}
                 initial="hidden"
                 animate={inView || animationTriggered ? "visible" : "hidden"}
             >
-                <motion.div className="font-josefin flex flex-col items-center justify-center" variants={itemVariants}>
-                    <motion.h2 className="text-2xl sm:text-3xl sm:font-bold lg:text-5xl font-semibold">
-                        {content.descriptionTitle}
+                <motion.div className="font-josefin" variants={itemVariants}>
+                    <p className="mb-7 font-jost text-xs tracking-[0.28em] text-beige/60">01 / ABOUT US</p>
+                    <motion.h2 className="text-5xl font-semibold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+                        WHAT IS<br /><span className="text-beige">CSA?</span>
                     </motion.h2>
-                    
-                    <motion.hr className="border-white w-1/2 sm:w-3/4 my-4" />
                 </motion.div>
                 
-                <motion.p className="font-jost text-xl lg:text-3xl tracking-wide font-light text-left" variants={itemVariants}>
-                    {content.description}
-                </motion.p>
+                <motion.div className="flex items-start gap-5 self-end" variants={itemVariants}>
+                    <span className="mt-2 block h-24 w-[3px] shrink-0 bg-beige" />
+                    <p className="max-w-3xl font-jost text-xl font-light leading-8 text-white/75 sm:text-2xl sm:leading-9">{content.description}</p>
+                </motion.div>
             </motion.div>
-        </div>
+        </section>
     );
 }
