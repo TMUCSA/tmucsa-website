@@ -36,3 +36,15 @@ export const defaultSiteContent = {
     instagramDescription: 'For quick questions, send us a direct message on Instagram and our team will get back to you.',
   },
 }
+
+export function withLinksNavigation(navItems) {
+  const items = Array.isArray(navItems) ? navItems : defaultSiteContent.global.navItems
+  if (items.some((item) => item?.href === '/links')) return items
+  const eventsIndex = items.findIndex((item) => item?.href === '/events')
+  const insertionIndex = eventsIndex >= 0 ? eventsIndex + 1 : Math.min(1, items.length)
+  return [
+    ...items.slice(0, insertionIndex),
+    { href: '/links', text: 'Links' },
+    ...items.slice(insertionIndex),
+  ]
+}
