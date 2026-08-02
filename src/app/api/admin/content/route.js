@@ -3,7 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 import { authorizeAdminRequest, serializeDocument } from '@/lib/admin-api'
 import { getAdminDb } from '@/lib/firebase-admin'
 import { writeAuditLog } from '@/lib/audit-log'
-import { defaultSiteContent } from '@/lib/site-content'
+import { defaultSiteContent, withLinksNavigation } from '@/lib/site-content'
 
 export const runtime = 'nodejs'
 
@@ -15,7 +15,8 @@ function cleanContent(section, data) {
   Object.keys(defaults).forEach((key) => {
     if (typeof defaults[key] === 'string') clean[key] = String(data[key] ?? defaults[key]).slice(0, 5000)
     else if (Array.isArray(defaults[key])) {
-      clean[key] = Array.isArray(data[key]) ? data[key].slice(0, 10).map((item) => ({ href: String(item.href || ''), text: String(item.text || '') })) : defaults[key]
+      const items = Array.isArray(data[key]) ? data[key].slice(0, 10).map((item) => ({ href: String(item?.href || ''), text: String(item?.text || '') })) : defaults[key]
+      clean[key] = section === 'global' && key === 'navItems' ? withLinksNavigation(items).slice(0, 10) : items
     } else if (typeof defaults[key] === 'object') {
       clean[key] = Object.fromEntries(Object.keys(defaults[key]).map((nestedKey) => [nestedKey, String(data[key]?.[nestedKey] ?? defaults[key][nestedKey])]))
     }
@@ -31,6 +32,7 @@ export async function GET(request) {
   snapshot.docs.forEach((document) => {
     if (allowedSections.has(document.id)) content[document.id] = { ...content[document.id], ...serializeDocument(document) }
   })
+  content.global.navItems = withLinksNavigation(content.global.navItems)
   return NextResponse.json({ content })
 }
 

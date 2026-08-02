@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import AdminPageHeader from './AdminPageHeader'
-import { defaultSiteContent } from '@/lib/site-content'
+import { defaultSiteContent, withLinksNavigation } from '@/lib/site-content'
 
 const sectionDetails = {
   home: { label: 'Homepage', description: 'Hero messaging and the main CSA story.' },
@@ -25,7 +25,14 @@ export default function ContentManager() {
 
   useEffect(() => {
     fetch('/api/admin/content', { cache: 'no-store' })
-      .then(async (response) => { const payload = await response.json(); if (!response.ok) throw new Error(payload.error); setContent(payload.content) })
+      .then(async (response) => {
+        const payload = await response.json()
+        if (!response.ok) throw new Error(payload.error)
+        setContent({
+          ...payload.content,
+          global: { ...payload.content.global, navItems: withLinksNavigation(payload.content.global?.navItems) },
+        })
+      })
       .catch((loadError) => setError(loadError.message || 'Unable to load content.'))
       .finally(() => setLoading(false))
   }, [])
