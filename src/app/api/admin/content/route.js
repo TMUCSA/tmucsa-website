@@ -15,7 +15,7 @@ function cleanContent(section, data) {
   Object.keys(defaults).forEach((key) => {
     if (typeof defaults[key] === 'string') clean[key] = String(data[key] ?? defaults[key]).slice(0, 5000)
     else if (Array.isArray(defaults[key])) {
-      const items = Array.isArray(data[key]) ? data[key].slice(0, 10).map((item) => ({ href: String(item.href || ''), text: String(item.text || '') })) : defaults[key]
+      const items = Array.isArray(data[key]) ? data[key].slice(0, 10).map((item) => ({ href: String(item?.href || ''), text: String(item?.text || '') })) : defaults[key]
       clean[key] = section === 'global' && key === 'navItems' ? withLinksNavigation(items).slice(0, 10) : items
     } else if (typeof defaults[key] === 'object') {
       clean[key] = Object.fromEntries(Object.keys(defaults[key]).map((nestedKey) => [nestedKey, String(data[key]?.[nestedKey] ?? defaults[key][nestedKey])]))
