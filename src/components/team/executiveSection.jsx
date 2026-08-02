@@ -111,7 +111,6 @@ export default function ExecutiveSection({ section, membersById }) {
 				<div className='pointer-events-none absolute -right-36 top-20 h-72 w-72 rounded-full bg-navy/15 blur-[100px]' aria-hidden='true' />
 				<div className='mx-auto max-w-4xl'>
 					<div className='border-b border-white/15 pb-6'>
-						<p className='font-jost text-[10px] uppercase tracking-[0.28em] text-beige/55'>01 / Leadership</p>
 						<h2 className='mt-3 font-josefin text-3xl font-bold tracking-wider text-white'>{section?.name ?? 'EXECUTIVES'}</h2>
 					</div>
 
