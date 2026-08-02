@@ -25,8 +25,8 @@ function ExecCard({ member, size = 'md' }) {
 	const initials = `${member.firstName?.[0] ?? ''}${member.lastName?.[0] ?? ''}`.toUpperCase()
 
 	return (
-		<div className='flex flex-col items-center text-center font-josefin tracking-wide'>
-			<div className={`relative ${imageSizeClass}`}>
+		<div className='group flex flex-col items-center text-center font-josefin tracking-wide'>
+			<div className={`relative ${imageSizeClass} transition-transform duration-300 group-hover:-translate-y-1`}>
 				{member.headshotUrl ? (
 					<Image
 						alt={member.headshotAlt || member.displayName}
@@ -42,7 +42,7 @@ function ExecCard({ member, size = 'md' }) {
 				)}
 			</div>
 
-			<div className={`mt-3 tracking-widest font-semibold text-beige ${roleClass}`}>
+			<div className={`mt-4 tracking-widest font-semibold text-beige ${roleClass}`}>
 				{formatExecRole(member.roleTitle)}
 			</div>
 			<div className={`mt-1 tracking-widest font-normal text-white ${nameClass}`}>{member.displayName}</div>
@@ -62,8 +62,8 @@ function ExecCardDesktop({ member, variant }) {
 	const imageSizeClass = isPresident ? 'w-44 h-44 lg:w-64 lg:h-64' : 'w-36 h-36 lg:w-56 lg:h-56'
 
 	return (
-		<div className='flex flex-col items-center text-center font-josefin'>
-			<div className={`relative ${imageSizeClass}`}>
+		<div className='group flex flex-col items-center text-center font-josefin'>
+			<div className={`relative ${imageSizeClass} transition-transform duration-300 group-hover:-translate-y-1`}>
 				{member.headshotUrl ? (
 					<Image
 						alt={member.headshotAlt || member.displayName}
@@ -79,7 +79,7 @@ function ExecCardDesktop({ member, variant }) {
 				)}
 			</div>
 
-			<div className={`mt-4 tracking-widest font-semibold text-beige ${isPresident ? 'text-2xl lg:text-3xl' : 'text-lg lg:text-xl'}`}>{formatExecRole(member.roleTitle)}</div>
+			<div className={`mt-5 tracking-widest font-semibold text-beige ${isPresident ? 'text-2xl lg:text-3xl' : 'text-lg lg:text-xl'}`}>{formatExecRole(member.roleTitle)}</div>
 			<div className={`font-normal text-white ${isPresident ? 'text-xl lg:text-2xl' : 'text-lg lg:text-xl'}`}>{member.displayName}</div>
 			{yearProgram ? (
 				<div className='font-light text-white/80 text-sm lg:text-base'>{yearProgram}</div>
@@ -105,12 +105,13 @@ export default function ExecutiveSection({ section, membersById }) {
 	const othersDesktop = execMembers.filter((m) => ![president, externalEvp, internalEvp].includes(m))
 
 	return (
-		<section id='executives' className='w-full'>
+		<section id='executives' className='w-full border-b border-white/10 bg-default'>
 			{/* Mobile (< md) */}
-			<div className='px-4 py-10 md:hidden'>
+			<div className='relative overflow-hidden px-4 py-16 md:hidden'>
+				<div className='pointer-events-none absolute -right-36 top-20 h-72 w-72 rounded-full bg-navy/15 blur-[100px]' aria-hidden='true' />
 				<div className='mx-auto max-w-4xl'>
-					<div className='h-14 flex items-center justify-center'>
-						<h2 className='font-josefin tracking-wider font-bold text-white text-2xl'>{section?.name ?? 'EXECUTIVES'}</h2>
+					<div className='border-b border-white/15 pb-6'>
+						<h2 className='mt-3 font-josefin text-3xl font-bold tracking-wider text-white'>{section?.name ?? 'EXECUTIVES'}</h2>
 					</div>
 
 					{president ? (
@@ -130,18 +131,22 @@ export default function ExecutiveSection({ section, membersById }) {
 			</div>
 
 			{/* Desktop (md+) */}
-			<div className='hidden md:block relative bg-default overflow-hidden px-8 py-16'>
+			<div className='relative hidden overflow-hidden bg-default px-8 pb-20 pt-24 md:block'>
 				{section?.backgroundImageUrl ? (
 					<Image
 						alt={section.backgroundImageAlt || section.name}
 						src={section.backgroundImageUrl}
 						fill
 						sizes='100vw'
-						className='object-cover object-center opacity-60 blur-[2px]'
+						className='object-cover object-center opacity-50 blur-[2px]'
 					/>
 				) : null}
+				<div className='absolute inset-0 bg-gradient-to-b from-default/80 via-default/25 to-default/75' />
 
 				<div className='relative z-10 mx-auto max-w-6xl'>
+					<div className='mb-12 flex items-center gap-4 border-b border-white/15 pb-5 font-jost text-xs uppercase tracking-[0.28em] text-white/55'>
+						<span className='text-beige/65'>01</span><span className='h-px w-12 bg-beige/60' /><span>{section?.name ?? 'Leadership'}</span>
+					</div>
 					<div className='grid grid-cols-3 items-start justify-items-center gap-x-8'>
 						<div className='flex justify-center w-full mt-10'>
 							{externalEvp ? <ExecCardDesktop member={externalEvp} variant='evp' /> : null}

@@ -14,6 +14,8 @@ import AdminAccessModal from './AdminAccessModal'
 const navigation = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: 'dashboard' },
   { href: '/admin/events', label: 'Events', icon: 'events' },
+  { href: '/admin/links', label: 'Links', icon: 'links' },
+  { href: '/admin/analytics', label: 'Analytics', icon: 'analytics' },
   { href: '/admin/team', label: 'Team', icon: 'team' },
   { href: '/admin/content', label: 'Website Content', icon: 'content' },
   { href: '/admin/media', label: 'Media', icon: 'media' },
