@@ -2,6 +2,8 @@
 
 The admin workspace is available at `/admin`. It supports approved Google accounts only and does not appear in public navigation.
 
+Administrators can also manage the public link hub and review privacy-conscious aggregate website analytics.
+
 ## Local setup
 
 Use Node.js 22 (the repository includes an `.nvmrc`):
@@ -59,6 +61,26 @@ siteContent/global
 
 Until a document is first saved, the public website uses the previous hardcoded wording as a fallback.
 
+### Links and ticket prompt
+
+- `/links` is the public, TMUCSA-branded link hub.
+- Admins manage destinations, categories, highlighting, availability windows, and sort order under **Links**.
+- A link only appears publicly when it is active and inside its optional start/expiry window.
+- A Tickets link can enable **Show ticket popup**. The first eligible ticket link by sort order is shown once per visitor browser session.
+- Deleting a link does not delete its historical aggregate click total.
+
+Link documents are stored in the private `links` collection and are served publicly through `/api/links`. This keeps disabled and scheduled links behind the server filter.
+
+### Analytics
+
+The **Analytics** section offers 7, 30, and 90-day views of:
+
+- Aggregate page views and top pages.
+- Link clicks and top links.
+- Ticket prompt views, clicks, and conversion rate.
+
+The application does not create visitor profiles or store names, emails, raw IP addresses, user-agent strings, or cross-site identifiers. A page is counted once per page per browser session using `sessionStorage`. Daily aggregate counters are stored in the private `analyticsDaily` collection.
+
 ### Media
 
 Manage homepage carousel order, the two homepage story images, and the two dedicated contact-page images. New files are optimized before upload, and both new and existing images can be cropped to landscape, classic, square, or portrait ratios before saving.
@@ -89,7 +111,10 @@ Recommended manual checks:
 7. Archive it, verify it disappears publicly, restore it, then remove the test event if appropriate.
 8. Edit an existing member and confirm `/team` still renders correctly.
 9. Change one content field, verify the public page, and restore the original wording if it was only a test.
-10. Do not publish a historical team snapshot as a test; publish one only when that academic year is ready to be preserved.
+10. Add a disabled test link, then enable it and confirm it appears on `/links`.
+11. Give a Tickets link a future start time and confirm its popup remains hidden, then remove the start time and verify the prompt appears once per browser session.
+12. Confirm the Analytics section reports test page views and clicks after the writes reach Firestore.
+13. Do not publish a historical team snapshot as a test; publish one only when that academic year is ready to be preserved.
 
 ## Vercel deployment
 
@@ -144,4 +169,5 @@ Removing a managed email blocks its next admin API request. Existing sessions ar
 - Member archive sets `isActive: false` and removes the member from the current page. Historical snapshots remain unchanged.
 - Team images are not automatically deleted when replaced because historical team pages may still reference them.
 - Audit entries are stored in the private `auditLogs` collection.
+- Link and analytics collections are private to the server APIs; direct client reads and writes remain denied.
 - Firebase Console edits continue to work because console access uses Google Cloud IAM rather than client Security Rules.

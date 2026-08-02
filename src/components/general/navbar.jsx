@@ -6,6 +6,9 @@ import { useSiteContent } from './SiteContentProvider';
 
 export default function Navbar() {
     const { navItems } = useSiteContent('global');
+    const visibleNavItems = navItems.some((item) => item.href === '/links')
+        ? navItems
+        : [...navItems.slice(0, 2), { href: '/links', text: 'Links' }, ...navItems.slice(2)];
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,7 +61,7 @@ export default function Navbar() {
                 </div>
 
                 <div className='hidden flex-row items-center space-x-4 text-xl text-gray-400 md:flex'>
-                    {navItems.map((route, index) => (
+                    {visibleNavItems.map((route, index) => (
                         <Link href={route.href} key={index} className={`p-4 font-light transition-all duration-200 ease-in-out hover:-translate-y-1 hover:text-white ${isActiveRoute(route.href) ? 'font-bold text-white' : 'underline-on-hover'}`}>
                             <p>{route.text}</p>
                         </Link>
@@ -81,7 +84,7 @@ export default function Navbar() {
             <div id="mobile-navigation" className={`fixed right-0 top-0 z-40 flex h-svh w-[min(84vw,360px)] flex-col border-l border-white/10 bg-default px-7 pb-8 pt-28 text-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 <p className='font-jost text-[10px] uppercase tracking-[0.3em] text-beige/50'>Navigate</p>
                 <div className='mt-7 border-t border-white/15'>
-                    {navItems.map((route, index) => {
+                    {visibleNavItems.map((route, index) => {
                         const active = isActiveRoute(route.href);
                         return (
                             <Link href={route.href} key={route.href} onClick={() => setIsMenuOpen(false)} className={`group flex min-h-16 items-center justify-between border-b border-white/15 py-4 transition ${active ? 'text-beige' : 'text-white/70 hover:text-white'}`}>
