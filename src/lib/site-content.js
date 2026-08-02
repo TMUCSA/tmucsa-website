@@ -3,6 +3,7 @@ export const defaultSiteContent = {
     navItems: [
       { href: '/', text: 'Home' },
       { href: '/events', text: 'Events' },
+      { href: '/links', text: 'Links' },
       { href: '/team', text: 'Team' },
       { href: '/contact', text: 'Contact' },
     ],

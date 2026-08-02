@@ -46,7 +46,9 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // auditLogs and any future collections are private by default.
+    // links, analyticsDaily, auditLogs, and any future collections are private
+    // by default. Public link reads and analytics writes pass through validated
+    // server routes.
     match /{document=**} {
       allow read, write: if false;
     }

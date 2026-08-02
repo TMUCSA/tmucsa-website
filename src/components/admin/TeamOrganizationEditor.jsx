@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import OptimizedAssetField from './OptimizedAssetField'
 import MemberPicker from './MemberPicker'
 import AdminIcon from './AdminIcon'
@@ -35,12 +35,26 @@ export default function TeamOrganizationEditor({ currentPage, initialSections, m
   const [publishing, setPublishing] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const pendingDepartmentId = useRef('')
+  const pendingDepartmentElement = useRef(null)
 
   useEffect(() => {
     setPage(currentPage || { title: 'OUR TEAM', yearLabel: '', heroImageUrl: '', heroImageAlt: '' })
     setHeroAsset(assetFrom(currentPage, 'heroImageUrl', 'heroImageStoragePath'))
     setSections(prepareSections(initialSections))
   }, [currentPage, initialSections])
+
+  useEffect(() => {
+    if (!pendingDepartmentId.current || !pendingDepartmentElement.current) return
+    const element = pendingDepartmentElement.current
+    const frame = window.requestAnimationFrame(() => {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      element.querySelector('[data-department-name]')?.focus({ preventScroll: true })
+      pendingDepartmentId.current = ''
+      pendingDepartmentElement.current = null
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [sections])
 
   function updateSection(index, changes) {
     setSections((current) => current.map((section, position) => position === index ? { ...section, ...changes } : section))
@@ -59,6 +73,7 @@ export default function TeamOrganizationEditor({ currentPage, initialSections, m
 
   function addDepartment() {
     const id = `department-${Date.now()}`
+    pendingDepartmentId.current = id
     setSections((current) => [...current, { id, name: 'NEW DEPARTMENT', type: 'department', memberIds: [], subteams: [], _asset: {} }])
   }
 
@@ -174,10 +189,10 @@ export default function TeamOrganizationEditor({ currentPage, initialSections, m
       </div>
 
       {sections.map((section, sectionIndex) => (
-        <section key={section.id} className="overflow-hidden rounded-2xl border border-[#161329]/8 bg-white shadow-sm">
+        <section key={section.id} ref={(element) => { if (section.id === pendingDepartmentId.current) pendingDepartmentElement.current = element }} className="scroll-mt-20 overflow-hidden rounded-2xl border border-[#161329]/8 bg-white shadow-sm">
           <div className="flex flex-wrap items-center gap-3 border-b border-[#161329]/8 bg-[#FAF9F6] px-5 py-4">
             <span className="rounded-full bg-[#25487D]/10 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-[#25487D]">{section.type}</span>
-            <input value={section.name || ''} onChange={(e) => updateSection(sectionIndex, { name: e.target.value })} className="min-w-0 flex-1 bg-transparent font-josefin text-xl font-semibold outline-none" />
+            <input data-department-name value={section.name || ''} onChange={(e) => updateSection(sectionIndex, { name: e.target.value })} className="min-w-0 flex-1 bg-transparent font-josefin text-xl font-semibold outline-none" />
             <button type="button" disabled={sectionIndex === 0} onClick={() => moveSection(sectionIndex, -1)} className="rounded-lg border border-[#161329]/10 bg-white px-2.5 py-1.5 text-xs disabled:opacity-30">↑</button>
             <button type="button" disabled={sectionIndex === sections.length - 1} onClick={() => moveSection(sectionIndex, 1)} className="rounded-lg border border-[#161329]/10 bg-white px-2.5 py-1.5 text-xs disabled:opacity-30">↓</button>
             {section.type !== 'executive' ? <button type="button" onClick={() => removeSection(sectionIndex)} className="rounded-lg px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50">Remove</button> : null}
