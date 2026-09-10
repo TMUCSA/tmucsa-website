@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import AdminPageHeader from './AdminPageHeader'
-import { defaultSiteContent, withLinksNavigation } from '@/lib/site-content'
+import { siteContentSchema, validateContent } from '@/lib/site-content'
 
 const sectionDetails = {
   home: { label: 'Homepage', description: 'Hero messaging and the main CSA story.' },
@@ -16,7 +16,7 @@ function TextField({ label, value, onChange, multiline = false, help }) {
 }
 
 export default function ContentManager() {
-  const [content, setContent] = useState(defaultSiteContent)
+  const [content, setContent] = useState(null)
   const [section, setSection] = useState('home')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -28,10 +28,8 @@ export default function ContentManager() {
       .then(async (response) => {
         const payload = await response.json()
         if (!response.ok) throw new Error(payload.error)
-        setContent({
-          ...payload.content,
-          global: { ...payload.content.global, navItems: withLinksNavigation(payload.content.global?.navItems) },
-        })
+        validateContent(payload.content, siteContentSchema)
+        setContent(payload.content)
       })
       .catch((loadError) => setError(loadError.message || 'Unable to load content.'))
       .finally(() => setLoading(false))
@@ -57,6 +55,8 @@ export default function ContentManager() {
   }
 
   if (loading) return <p className="py-24 text-center text-sm text-[#161329]/40">Loading website content…</p>
+
+  if (!content) return <div role="alert" className="py-24 text-center"><p>{error || 'Website content is unavailable.'}</p><button onClick={() => window.location.reload()} className="mt-4 underline">Try again</button></div>
 
   const home = content.home
   const contact = content.contact

@@ -50,6 +50,8 @@ export default function Body() {
   const topImageUrl = typeof images[0]?.imageUrl === 'string' ? images[0].imageUrl.trim() : '';
   const bottomImageUrl = typeof images[1]?.imageUrl === 'string' ? images[1].imageUrl.trim() : '';
 
+  if (!content) return <div className="min-h-64" aria-busy="true" />;
+
   const statements = [
     { number: '01', title: 'OUR GOAL', text: content.ourGoal },
     { number: '02', title: 'WHAT WE OFFER', text: content.weOffer },

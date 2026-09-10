@@ -5,7 +5,7 @@ import { useSiteContent } from '@/components/general/SiteContentProvider';
 
 export default function Description() {
     const content = useSiteContent('home');
-    const headingParts = String(content.descriptionTitle || '').trim().split(/\s+/);
+    const headingParts = String(content?.descriptionTitle || '').trim().split(/\s+/);
     const headingLast = headingParts.pop();
     const headingLead = headingParts.join(' ');
     const [animationTriggered, setAnimationTriggered] = useState(false);
@@ -40,6 +40,8 @@ export default function Description() {
             setAnimationTriggered(true);
         }
     }, [inView, animationTriggered]);
+
+    if (!content) return <div className="min-h-64" aria-busy="true" />;
 
     return (
         <section
