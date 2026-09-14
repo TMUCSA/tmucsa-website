@@ -1,10 +1,11 @@
+import useRemoteData from '@/hooks/useRemoteData';
+import ContentStatus from '@/components/general/ContentStatus';
 import React from 'react';
-import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocsFromServer } from 'firebase/firestore';
 import { useSiteContent } from '@/components/general/SiteContentProvider';
 
 function imageAlt(value, fallback) {
@@ -12,9 +13,16 @@ function imageAlt(value, fallback) {
   return text || fallback;
 }
 
+async function loadImages() {
+  const snapshot = await getDocsFromServer(collection(db, 'home-images'));
+  const images = Object.fromEntries(snapshot.docs.map(doc => [doc.id, doc.data()]));
+  return [images.top, images.bottom];
+}
+
 export default function Body() {
   const content = useSiteContent('home');
-  const [images,setImages] = useState([]);
+  const { data, loading, error, retry } = useRemoteData(loadImages);
+  const images = data || [];
 
   const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
 
@@ -32,20 +40,6 @@ export default function Body() {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
   };
-
-  const fetchImages = async () => {
-    try{
-      const querySnapshot = await getDocs(collection(db,'home-images'));
-      const fetchedImages = Object.fromEntries(querySnapshot.docs.map(doc => [doc.id, {id: doc.id, ...doc.data() }]));
-      setImages([fetchedImages.top, fetchedImages.bottom])
-    } catch (err){
-      console.error('failed to fetch body: ', err);
-    }
-  }
-
-  useEffect(() => {
-    fetchImages();
-  },[]);
 
   const topImageUrl = typeof images[0]?.imageUrl === 'string' ? images[0].imageUrl.trim() : '';
   const bottomImageUrl = typeof images[1]?.imageUrl === 'string' ? images[1].imageUrl.trim() : '';
@@ -69,6 +63,7 @@ export default function Body() {
           </div>
         </div>
 
+        <ContentStatus loading={loading} error={error} retry={retry} label="community photos" emptyMessage={!topImageUrl && !bottomImageUrl ? 'No community photos have been published yet.' : null} />
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
           <motion.div variants={fadeIn} initial="hidden" animate={inView ? 'visible' : 'hidden'} transition={{ duration: 0.8 }} className="relative aspect-[4/3] overflow-hidden lg:row-span-2 lg:aspect-auto lg:min-h-[680px]">
             {topImageUrl ? <Image src={topImageUrl} fill sizes="(min-width: 1024px) 48vw, 100vw" className="object-cover" alt={imageAlt(images[0]?.imageAlt, 'TMUCSA community gathering')} /> : <div className="absolute inset-0 bg-white/5" aria-hidden="true" />}

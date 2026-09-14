@@ -3,8 +3,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
+import useRemoteData from '@/hooks/useRemoteData'
+import ContentStatus from '@/components/general/ContentStatus'
+import { collection, getDocsFromServer } from 'firebase/firestore'
 import { useSiteContent, SiteContentStatus } from '@/components/general/SiteContentProvider'
 import { db } from '@/lib/firebase'
 
@@ -27,33 +28,18 @@ function Arrow({ diagonal = false }) {
   )
 }
 
+async function loadContactImages() {
+  const snapshot = await getDocsFromServer(collection(db, 'contact-images'))
+  return Object.fromEntries(snapshot.docs.map(document => [document.id, document.data()]))
+}
+
 export default function Contact() {
   const content = useSiteContent('contact')
   const global = useSiteContent('global')
-  const [contactImages, setContactImages] = useState({})
-  const [imageError, setImageError] = useState(false)
-  const [imageAttempt, setImageAttempt] = useState(0)
+  const { data, loading: imageLoading, error: imageError, retry: retryImages } = useRemoteData(loadContactImages)
+  const contactImages = data || {}
   const headingParts = (content?.heading || '').trim().split(/\s+/)
   const headingLast = headingParts.pop()
-
-  useEffect(() => {
-    let active = true
-    setImageError(false)
-    getDocs(collection(db, 'contact-images'))
-      .then((snapshot) => {
-        if (!active) return
-        const next = {}
-        snapshot.docs.forEach((document) => {
-          if (['primary', 'secondary'].includes(document.id)) next[document.id] = document.data()
-        })
-        setContactImages(next)
-      })
-      .catch((error) => {
-        console.error('Unable to load contact page images:', error)
-        if (active) setImageError(true)
-      })
-    return () => { active = false }
-  }, [imageAttempt])
 
   if (!content || !global) return <SiteContentStatus />
 
@@ -110,7 +96,7 @@ export default function Contact() {
             </div>
           </div>
 
-          {imageError ? <p role="status" className="relative z-10 mt-4 text-sm text-white/70">Photos are temporarily unavailable. <button onClick={() => setImageAttempt((value) => value + 1)} className="underline">Try again</button></p> : null}
+          <ContentStatus loading={imageLoading} error={imageError} retry={retryImages} label="contact photos" emptyMessage={!contactImages.primary?.imageUrl && !contactImages.secondary?.imageUrl ? 'No contact photos have been published yet.' : null} className="relative z-10 !py-4" />
 
           <div className="absolute bottom-5 left-0 hidden -rotate-90 origin-bottom-left font-jost text-[10px] tracking-[0.3em] text-white/45 sm:block" aria-hidden="true">
             CULTURE · COMMUNITY · CONNECTION

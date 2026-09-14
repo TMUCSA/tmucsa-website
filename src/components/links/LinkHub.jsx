@@ -1,25 +1,24 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { trackAnalytics } from '@/components/general/AnalyticsTracker'
+
+import useRemoteData from '@/hooks/useRemoteData'
+import ContentStatus from '@/components/general/ContentStatus'
 
 const categoryOrder = ['Tickets', 'Membership', 'Hiring', 'Community', 'Memories', 'Other']
 
-export default function LinkHub() {
-  const [links, setLinks] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+async function loadLinks({ signal }) {
+  const response = await fetch('/api/links', { cache: 'no-store', signal })
+  if (!response.ok) throw new Error('Unable to load links')
+  const payload = await response.json()
+  if (!Array.isArray(payload.links)) throw new Error('Invalid links response')
+  return payload.links
+}
 
-  useEffect(() => {
-    fetch('/api/links', { cache: 'no-store' })
-      .then(async (response) => {
-        const payload = await response.json()
-        if (!response.ok) throw new Error(payload.error || 'Unable to load links.')
-        setLinks(payload.links)
-      })
-      .catch((loadError) => setError(loadError.message))
-      .finally(() => setLoading(false))
-  }, [])
+export default function LinkHub() {
+  const { data, loading, error, retry } = useRemoteData(loadLinks)
+  const links = useMemo(() => data || [], [data])
 
   const groups = useMemo(() => categoryOrder
     .map((category) => ({ category, links: links.filter((link) => link.category === category) }))
@@ -33,9 +32,7 @@ export default function LinkHub() {
           <p className="mx-auto mt-5 max-w-xl font-jost font-light leading-7 text-white/55">Tickets, applications, community resources, and event memories.</p>
         </header>
 
-        {loading ? <p className="py-20 text-center text-sm text-white/40">Loading links…</p> : null}
-        {error ? <p className="my-10 rounded-2xl border border-red-300/20 bg-red-300/10 px-5 py-4 text-center text-sm text-red-100">{error}</p> : null}
-        {!loading && !error && !groups.length ? <p className="py-20 text-center text-sm text-white/40">There are no active links right now. Check back soon.</p> : null}
+        <ContentStatus loading={loading} error={error} retry={retry} label="links" emptyMessage={!groups.length ? 'There are no active links right now. Check back soon.' : null} />
 
         <div className="mt-10 space-y-12">
           {groups.map((group, groupIndex) => (

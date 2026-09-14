@@ -1,42 +1,26 @@
-import { useState, useEffect } from 'react';
+import useRemoteData from '@/hooks/useRemoteData';
+import ContentStatus from '@/components/general/ContentStatus';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import Title from './title';
 import Image from 'next/image';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocsFromServer } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
+async function loadImages() {
+  const snapshot = await getDocsFromServer(collection(db, 'carousel-images'));
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(image => image.imageUrl).sort((a, b) => (a.order || 0) - (b.order || 0));
+}
+
 export default function Carousel() {
-    const [images, setImages] = useState([]);
-
-    useEffect(() => {
-        fetchImages();
-    }, []);
-    
-    const fetchImages = async () => {
-
-        // try {
-        //     const response = await fetch('/data/carousel-pictures.json');
-        //     const data = await response.json();
-        //     setImages(data);
-        // } catch (err) {
-        //     console.error(err);
-        // }
-        try{
-            console.log("fetching carousel...");
-            const querySnapshot = await getDocs(collection(db,'carousel-images'));
-            const fetchedImages = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data() })).sort((a, b) => (a.order || 0) - (b.order || 0));
-            setImages(fetchedImages);
-        } catch (err) {
-            console.error("big error: ", err);
-        }
-
-    };
+    const { data, loading, error, retry } = useRemoteData(loadImages);
+    const images = data || [];
 
     return (
         <section className="relative min-h-[720px] h-[100svh] overflow-hidden bg-default">
             <Title/>
+            <ContentStatus loading={loading} error={error} retry={retry} label="photos" emptyMessage={!images.length ? 'No photos have been published yet.' : null} className="absolute inset-x-0 top-24 z-20 bg-default/80 !py-4" />
             
             <Swiper
                 modules={[Autoplay]}
