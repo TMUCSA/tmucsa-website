@@ -21,7 +21,7 @@ export default function LinkHub() {
   const links = useMemo(() => data || [], [data])
 
   const groups = useMemo(() => categoryOrder
-    .map((category) => ({ category, links: links.filter((link) => link.category === category) }))
+    .map((category) => ({ category, links: links.filter((link) => link.category === category && !(link.showTicketPrompt && link.hideFromLinkList)) }))
     .filter((group) => group.links.length), [links])
 
   return (

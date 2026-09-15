@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { authorizeAdminRequest, serializeDocument } from '@/lib/admin-api'
 import { getAdminDb } from '@/lib/firebase-admin'
-import { linkPayload, safeDocumentId } from '@/lib/link-hub'
+import { linkPayload, safeDocumentId, saveLink } from '@/lib/link-hub'
 import { writeAuditLog } from '@/lib/audit-log'
 
 export const runtime = 'nodejs'
@@ -17,8 +17,8 @@ export async function PATCH(request, { params }) {
     if (payload.error) return NextResponse.json({ error: payload.error }, { status: 400 })
     const db = getAdminDb()
     const reference = db.collection('links').doc(id)
-    if (!(await reference.get()).exists) return NextResponse.json({ error: 'Link not found.' }, { status: 404 })
-    await reference.update({ ...payload.data, updatedAt: FieldValue.serverTimestamp(), updatedBy: authorization.admin.uid })
+    const saved = await saveLink(db, reference, { ...payload.data, updatedAt: FieldValue.serverTimestamp(), updatedBy: authorization.admin.uid })
+    if (!saved) return NextResponse.json({ error: 'Link not found.' }, { status: 404 })
     await writeAuditLog(db, authorization.admin, 'update', 'link', id, `Updated link “${payload.data.title}”`)
     return NextResponse.json({ link: serializeDocument(await reference.get()) })
   } catch (error) {
