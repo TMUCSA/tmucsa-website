@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 
@@ -6,41 +6,7 @@ function Arrow() {
     return <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" d="M5 12h14m-5-5 5 5-5 5" /></svg>
 }
 
-const LatestEvent = () => {
-    const [latestEvent, setLatestEvents] = useState(null);
-  
-    useEffect(() => {
-        const fetchLatestEvent = async () => {
-            try{
-                const response = await fetch('/api/events');
-                if (!response.ok) throw new Error('Unable to load events');
-                const payload = await response.json();
-                const eventData = payload.events.map(data => {
-                    const date = new Date(data.date);
-                    const images = data.images?.length ? data.images : (data.imageUrls || []).map((url) => ({ url, focalX: 0.5, focalY: 0.5 }))
-                    return { 
-                        ...data,
-                        date: date,
-                        images,
-                        imageUrls: images.map((image) => image.url),
-                    };
-                });
-
-                if(eventData.length > 0) {
-                    setLatestEvents(eventData[0]);
-                }
-            } catch(err) {
-                console.error("Error fetching latest event: ", err);
-            }
-        };
-
-        fetchLatestEvent();
-    },[]);
-
-    if (!latestEvent) {
-        return <section className="h-[78svh] min-h-[620px] animate-pulse bg-white/[0.03]" aria-label="Loading latest event" />;
-      }
-    
+const LatestEvent = ({ latestEvent }) => {
     return (
         <section
             className='relative h-[84svh] min-h-[680px] w-full overflow-hidden bg-cover bg-center text-white'

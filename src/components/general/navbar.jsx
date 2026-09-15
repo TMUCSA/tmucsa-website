@@ -5,10 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useSiteContent } from './SiteContentProvider';
 
 export default function Navbar() {
-    const { navItems } = useSiteContent('global');
-    const visibleNavItems = navItems.some((item) => item.href === '/links')
-        ? navItems
-        : [...navItems.slice(0, 2), { href: '/links', text: 'Links' }, ...navItems.slice(2)];
+    const global = useSiteContent('global');
+    const visibleNavItems = global?.navItems || [];
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);

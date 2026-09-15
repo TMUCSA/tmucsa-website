@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import AdminPageHeader from './AdminPageHeader'
 
 const categories = ['Tickets', 'Membership', 'Hiring', 'Memories', 'Community', 'Other']
-const blankLink = { title: '', description: '', url: '', category: 'Other', enabled: true, featured: false, showTicketPrompt: false, startsAt: '', expiresAt: '', order: 0 }
+const blankLink = { title: '', description: '', url: '', category: 'Other', enabled: true, featured: false, showTicketPrompt: false, hideFromLinkList: false, popupButtonText: '', startsAt: '', expiresAt: '', order: 0 }
 
 function inputDate(value) {
   if (!value) return ''
@@ -15,7 +15,7 @@ function inputDate(value) {
 }
 
 function normalized(link) {
-  return { ...blankLink, ...link, startsAt: inputDate(link.startsAt), expiresAt: inputDate(link.expiresAt) }
+  return { ...blankLink, ...link, popupButtonText: link.popupButtonText || (link.category === 'Tickets' ? 'Get tickets' : 'Learn more'), startsAt: inputDate(link.startsAt), expiresAt: inputDate(link.expiresAt) }
 }
 
 function apiPayload(link) {
@@ -43,8 +43,10 @@ function LinkFields({ value, onChange }) {
     <div className="space-y-3 border-t border-[#161329]/8 pt-4 sm:col-span-2 sm:grid sm:grid-cols-3 sm:gap-5 sm:space-y-0">
       <Toggle checked={value.enabled} onChange={(next) => set('enabled', next)} label="Active" help="Visible while within its date window." />
       <Toggle checked={value.featured} onChange={(next) => set('featured', next)} label="Featured" help="Uses the highlighted style on the links page." />
-      <Toggle checked={value.showTicketPrompt && value.category === 'Tickets'} disabled={value.category !== 'Tickets'} onChange={(next) => set('showTicketPrompt', next)} label="Show ticket popup" help="Prompts once per visitor session while active." />
+      <Toggle checked={value.showTicketPrompt} onChange={(next) => onChange({ ...value, showTicketPrompt: next, hideFromLinkList: next && value.hideFromLinkList })} label="Show popup" help="Shows while active, once per visitor session. Saving replaces any other popup." />
     </div>
+    {value.showTicketPrompt ? <div className="sm:col-span-2"><Toggle checked={value.hideFromLinkList} onChange={(next) => set('hideFromLinkList', next)} label="Hide from links page" help="Only show this link in the popup. It returns to the list when its popup is turned off or replaced." /></div> : null}
+    {value.showTicketPrompt ? <label className="text-sm font-medium sm:col-span-2">Popup button text<input maxLength={60} value={value.popupButtonText} onChange={(event) => set('popupButtonText', event.target.value)} className="admin-input" placeholder={value.category === 'Tickets' ? 'Get tickets' : 'Learn more'} /><span className="mt-1 block text-[10px] font-normal text-[#161329]/35">For example, “Apply now” for hiring. Leave blank to use the default.</span></label> : null}
   </div>
 }
 
@@ -113,12 +115,12 @@ export default function LinksManager() {
       const response = await fetch('/api/admin/links', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(apiPayload({ ...draft, order: links.length })) })
       const payload = await response.json()
       if (!response.ok) throw new Error(payload.error || 'Unable to create link.')
-      setLinks((current) => [...current, payload.link]); setDraft(blankLink)
+      setLinks((current) => [...current.map((item) => payload.link.showTicketPrompt ? { ...item, showTicketPrompt: false, hideFromLinkList: false } : item), payload.link]); setDraft(blankLink)
     } catch (createError) { setError(createError.message) } finally { setCreating(false) }
   }
 
   return <main className="min-h-screen px-5 py-8 sm:px-8 lg:px-10 lg:py-10 xl:px-14">
-    <AdminPageHeader eyebrow="LINK HUB" title="Links" description="Manage the destinations shown at /links and choose when a ticket prompt appears." actions={<a href="/links" target="_blank" className="rounded-xl border border-[#161329]/10 bg-white px-5 py-3 text-sm font-medium">Preview links</a>} />
+    <AdminPageHeader eyebrow="LINK HUB" title="Links" description="Manage the destinations shown at /links and choose which link appears in the popup." actions={<a href="/links" target="_blank" className="rounded-xl border border-[#161329]/10 bg-white px-5 py-3 text-sm font-medium">Preview links</a>} />
     <div className="mt-8 grid items-start gap-6 xl:grid-cols-[.8fr_1.2fr]">
       <form onSubmit={create} className="rounded-2xl border border-[#161329]/8 bg-white p-5 shadow-sm sm:p-6 xl:sticky xl:top-8">
         <h2 className="font-josefin text-xl font-semibold">Add a link</h2><p className="mb-6 mt-1 text-xs text-[#161329]/40">New links appear after the existing links.</p>
@@ -129,7 +131,7 @@ export default function LinksManager() {
       <section><div className="mb-4 flex items-end justify-between"><div><h2 className="font-josefin text-xl font-semibold">Current links</h2><p className="mt-1 text-xs text-[#161329]/40">Edit categories, availability, and promotions.</p></div><span className="text-xs text-[#161329]/35">{links.length} total</span></div>
         {loading ? <p className="rounded-2xl bg-white py-16 text-center text-sm text-[#161329]/40">Loading links…</p> : null}
         {!loading && !links.length ? <p className="rounded-2xl border border-dashed border-[#161329]/15 py-16 text-center text-sm text-[#161329]/40">Add the first link to publish your hub.</p> : null}
-        <div className="space-y-4">{links.map((link) => <ExistingLink key={link.id} initial={link} onSaved={(saved) => setLinks((current) => current.map((item) => item.id === saved.id ? saved : item).sort((a, b) => a.order - b.order))} onDeleted={(id) => setLinks((current) => current.filter((item) => item.id !== id))} />)}</div>
+        <div className="space-y-4">{links.map((link) => <ExistingLink key={link.id} initial={link} onSaved={(saved) => setLinks((current) => current.map((item) => item.id === saved.id ? saved : saved.showTicketPrompt ? { ...item, showTicketPrompt: false, hideFromLinkList: false } : item).sort((a, b) => a.order - b.order))} onDeleted={(id) => setLinks((current) => current.filter((item) => item.id !== id))} />)}</div>
       </section>
     </div>
   </main>
