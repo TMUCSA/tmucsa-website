@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useSiteContent } from '@/components/general/SiteContentProvider';
+import { useSiteContent, SiteContentStatus } from '@/components/general/SiteContentProvider';
 
 export default function Title() {
     const content = useSiteContent('home');
+    if (!content) return <SiteContentStatus />;
     const titleVariants = {
         hidden: { opacity: 0, y: -20 },
         visible: {
@@ -53,8 +54,7 @@ export default function Title() {
                 >
                     <div className="text-[clamp(2.35rem,10.5vw,3.25rem)] sm:hidden">
                         <AnimatedLine className="text-white">{content.heroLineOne}</AnimatedLine>
-                        <AnimatedLine>CHINESE</AnimatedLine>
-                        <AnimatedLine>STUDENT</AnimatedLine>
+                        {content.heroLineTwo.split(/\s+/).map((word, index) => <AnimatedLine key={index}>{word}</AnimatedLine>)}
                         <AnimatedLine>{content.heroLineThree}</AnimatedLine>
                     </div>
                     <div className="hidden text-[clamp(3.25rem,6.4vw,6.75rem)] sm:block">

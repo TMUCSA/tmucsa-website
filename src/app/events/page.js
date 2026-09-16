@@ -1,44 +1,31 @@
 'use client';
 import EventList from '@/components/events/eventList';
 import LatestEvent from '@/components/events/latestEvent';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useRemoteData from '@/hooks/useRemoteData';
+import ContentStatus from '@/components/general/ContentStatus';
+
+async function loadEvents({ signal }) {
+    const response = await fetch('/api/events', { cache: 'no-store', signal });
+    if (!response.ok) throw new Error('Unable to load events');
+    const payload = await response.json();
+    return payload.events.map(data => {
+        const date = new Date(data.date);
+        if (Number.isNaN(date.getTime())) throw new Error('Invalid event date');
+        const images = data.images?.length ? data.images : (data.imageUrls || []).map(url => ({ url, focalX: 0.5, focalY: 0.5 }));
+        return { ...data, date, images, imageUrls: images.map(image => image.url) };
+    });
+}
 
 export default function Events() {
-    const [allEvents, setAllEvents] = useState([]);
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-    const [availableYears, setAvailableYears] = useState([]);
+    const { data, loading, error, retry } = useRemoteData(loadEvents);
+    const allEvents = data || [];
+    const [year, setSelectedYear] = useState(null);
+    const availableYears = [...new Set(allEvents.map(event => event.date.getFullYear()))].sort((a, b) => b - a);
+    const selectedYear = availableYears.includes(year) ? year : availableYears[0];
 
-    useEffect(() => {
-        const fetchAllEvents = async () => {
-            try{
-                const response = await fetch('/api/events');
-                if (!response.ok) throw new Error('Unable to load events');
-                const payload = await response.json();
-                const eventsData = payload.events.map(data => {
-                    const date = new Date(data.date);
-                    const images = data.images?.length ? data.images : (data.imageUrls || []).map((url) => ({ url, focalX: 0.5, focalY: 0.5 }))
-                    return { 
-                        ...data,
-                        date: date,
-                        images,
-                        imageUrls: images.map((image) => image.url),
-                    };
-                });
-                setAllEvents(eventsData);
-                const years = [...new Set(eventsData.map(event => event.date.getFullYear()))].sort((a, b) => b - a);
-                setAvailableYears(years);
-
-                if(years.length > 0) {
-                    setSelectedYear(years[0]);
-                }
-
-            } catch (err) {
-                console.error("Error fetching events: ", err);
-            }
-        };
-
-        fetchAllEvents();
-    },[]);
+    if (loading || error) return <main className="min-h-[70svh] pt-28"><ContentStatus loading={loading} error={error} retry={retry} label="events" /></main>;
+    if (!allEvents.length) return <main className="min-h-[70svh] pt-28"><ContentStatus emptyMessage="No events have been published yet. Check back soon." /></main>;
 
     const filteredEvents = allEvents.filter(event => 
         event.date.getFullYear() === selectedYear
@@ -59,7 +46,7 @@ export default function Events() {
 
     return (
         <main className='relative overflow-hidden bg-default text-white'>
-            <LatestEvent />
+            <LatestEvent latestEvent={allEvents[0]} />
 
             <section className='relative mx-auto max-w-[1440px] px-6 pb-12 pt-24 sm:px-10 lg:px-16 lg:pb-16 lg:pt-32 xl:px-24'>
                 <div className='pointer-events-none absolute right-[-12rem] top-0 h-96 w-96 rounded-full bg-navy/15 blur-[120px]' aria-hidden='true' />

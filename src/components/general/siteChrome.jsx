@@ -3,9 +3,15 @@
 import { usePathname } from 'next/navigation'
 import Navbar from './navbar'
 import Footer from './footer'
-import { SiteContentProvider } from './SiteContentProvider'
+import { SiteContentProvider, SiteContentStatus, useSiteContent } from './SiteContentProvider'
 import AnalyticsTracker from './AnalyticsTracker'
 import TicketPrompt from './TicketPrompt'
+
+function PublicContent({ children }) {
+  const global = useSiteContent('global')
+  if (!global) return <main className="min-h-screen flex items-center justify-center"><SiteContentStatus /></main>
+  return <><Navbar />{children}<Footer /><TicketPrompt /></>
+}
 
 export default function SiteChrome({ children }) {
   const pathname = usePathname()
@@ -14,10 +20,7 @@ export default function SiteChrome({ children }) {
   return (
     <SiteContentProvider>
       <AnalyticsTracker />
-      {!isAdmin ? <Navbar /> : null}
-      <main>{children}</main>
-      {!isAdmin ? <Footer /> : null}
-      {!isAdmin ? <TicketPrompt /> : null}
+      {isAdmin ? children : <PublicContent>{children}</PublicContent>}
     </SiteContentProvider>
   )
 }

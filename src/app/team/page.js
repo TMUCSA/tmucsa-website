@@ -3,76 +3,51 @@ import HeroBanner from '@/components/team/heroBanner'
 import ExecutiveSection from '@/components/team/executiveSection'
 import DepartmentSection from '@/components/team/departmentSection'
 import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import { useState, useEffect } from 'react';
+import { collection, doc, getDocFromServer, getDocsFromServer } from 'firebase/firestore';
+import { useState } from 'react';
+import useRemoteData from '@/hooks/useRemoteData';
+import ContentStatus from '@/components/general/ContentStatus';
+
+async function loadTeam({ key: selectedPageId }) {
+    const pageRef = doc(db, 'teamPages', selectedPageId)
+    const pageSnap = await getDocFromServer(pageRef)
+    if (!pageSnap.exists()) return null
+    const [sectionsSnap, membersSnap, pagesSnap] = await Promise.all([
+        getDocsFromServer(collection(pageRef, 'sections')),
+        getDocsFromServer(selectedPageId === 'current' ? collection(db, 'members') : collection(pageRef, 'memberSnapshots')),
+        getDocsFromServer(collection(db, 'teamPages')),
+    ])
+    const pageFields = pageSnap.data()
+    const pageData = {
+        ...pageFields,
+        yearLabel: pageFields.yearLabel ?? pageFields.year,
+        sections: Object.fromEntries(sectionsSnap.docs.map(document => [document.id, document.data()])),
+    }
+    const current = pagesSnap.docs.find(document => document.id === 'current')?.data()
+    const currentYear = current?.yearLabel ?? current?.year
+    const historical = pagesSnap.docs
+        .filter(document => document.id !== 'current' && document.data().status === 'published' && document.data().yearLabel !== currentYear)
+        .map(document => ({ id: document.id, yearLabel: document.data().yearLabel || document.id }))
+        .sort((a, b) => b.yearLabel.localeCompare(a.yearLabel))
+    return {
+        pageData,
+        membersById: Object.fromEntries(membersSnap.docs.map(document => [document.id, document.data()])),
+        availablePages: [...(current ? [{ id: 'current', yearLabel: currentYear }] : []), ...historical],
+    }
+}
 
 export default function Team() {
-    const [pageData, setPageData] = useState(null)
-    const [membersById, setMembersById] = useState({})
-    const [availablePages, setAvailablePages] = useState([])
     const [selectedPageId, setSelectedPageId] = useState('current')
+    const { data, loading, error, retry } = useRemoteData(loadTeam, selectedPageId)
 
-    useEffect(() => {
-        const fetchTeamData = async () => {
-            try {
-                // 1) Team page structure (fields live on doc; sections live in a subcollection)
-                const currentPageRef = doc(db, 'teamPages', selectedPageId)
-                const currentPageSnap = await getDoc(currentPageRef)
-
-                if (!currentPageSnap.exists()) {
-                    setPageData(null)
-                    return
-                }
-
-                const pageFields = currentPageSnap.data() ?? {}
-
-                // Fetch subcollection: teamPages/current/sections
-                const sectionsSnap = await getDocs(collection(currentPageRef, 'sections'))
-                const sections = {}
-                sectionsSnap.forEach((sectionDoc) => {
-                    sections[sectionDoc.id] = sectionDoc.data()
-                })
-
-                const nextPageData = {
-                    ...pageFields,
-                    // common normalization if your Firestore uses `year` instead of `yearLabel`
-                    yearLabel: pageFields.yearLabel ?? pageFields.year,
-                    sections,
-                }
-
-                setPageData(nextPageData)
-
-                console.log('Fetched team page data:', nextPageData) // Debug log
-
-                // 2) Members lookup table
-                const membersSnap = await getDocs(selectedPageId === 'current' ? collection(db, 'members') : collection(currentPageRef, 'memberSnapshots'))
-                const nextMembersById = {}
-                membersSnap.forEach((memberDoc) => {
-                    nextMembersById[memberDoc.id] = memberDoc.data()
-                })
-                setMembersById(nextMembersById)
-
-                if (selectedPageId === 'current') {
-                    const pagesSnap = await getDocs(collection(db, 'teamPages'))
-                    const historical = pagesSnap.docs
-                        .filter((pageDoc) => pageDoc.id !== 'current' && pageDoc.data()?.status === 'published' && pageDoc.data()?.yearLabel !== nextPageData.yearLabel)
-                        .map((pageDoc) => ({ id: pageDoc.id, yearLabel: pageDoc.data()?.yearLabel || pageDoc.id }))
-                        .sort((a, b) => b.yearLabel.localeCompare(a.yearLabel))
-                    setAvailablePages([{ id: 'current', yearLabel: nextPageData.yearLabel }, ...historical])
-                }
-            } catch (err) {
-                console.error('Error fetching team data:', err)
-                setPageData(null)
-                setMembersById({})
-            }
-        }
-
-        fetchTeamData()
-    }, [selectedPageId])
-
-    if (!pageData) {
-        return <main className='overflow-x-hidden lg:pt-16 w-screen' />
+    if (loading || error || !data) {
+        return <main className="min-h-[70svh] pt-28">
+            <ContentStatus loading={loading} error={error} retry={retry} label="the team" emptyMessage="This team page hasn’t been published yet." />
+            {!loading && selectedPageId !== 'current' ? <button onClick={() => setSelectedPageId('current')} className="mx-auto block pb-12 text-beige underline">Back to the current team</button> : null}
+        </main>
     }
+
+    const { pageData, membersById, availablePages } = data
 
     const departmentSections = Object.entries(pageData.sections ?? {})
         .filter(([, section]) => section?.type === 'department')

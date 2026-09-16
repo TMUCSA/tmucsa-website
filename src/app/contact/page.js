@@ -3,9 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
-import { useSiteContent } from '@/components/general/SiteContentProvider'
+import useRemoteData from '@/hooks/useRemoteData'
+import ContentStatus from '@/components/general/ContentStatus'
+import { collection, getDocsFromServer } from 'firebase/firestore'
+import { useSiteContent, SiteContentStatus } from '@/components/general/SiteContentProvider'
 import { db } from '@/lib/firebase'
 
 const socialNetworks = [
@@ -13,11 +14,6 @@ const socialNetworks = [
   { key: 'tiktok', label: 'TikTok', icon: '/icons/socials/tik-tok.png' },
   { key: 'discord', label: 'Discord', icon: '/icons/socials/discord.png' },
 ]
-
-const defaultContactImages = {
-  primary: { imageUrl: '/images/csa-candid.jpg', imageAlt: 'TMUCSA team members together' },
-  secondary: { imageUrl: '/images/orientation-2023.jpg', imageAlt: 'Students at a TMUCSA event' },
-}
 
 const reveal = {
   hidden: { opacity: 0, y: 24 },
@@ -32,27 +28,20 @@ function Arrow({ diagonal = false }) {
   )
 }
 
+async function loadContactImages() {
+  const snapshot = await getDocsFromServer(collection(db, 'contact-images'))
+  return Object.fromEntries(snapshot.docs.map(document => [document.id, document.data()]))
+}
+
 export default function Contact() {
   const content = useSiteContent('contact')
   const global = useSiteContent('global')
-  const [contactImages, setContactImages] = useState(defaultContactImages)
-  const headingParts = content.heading.trim().split(/\s+/)
+  const { data, loading: imageLoading, error: imageError, retry: retryImages } = useRemoteData(loadContactImages)
+  const contactImages = data || {}
+  const headingParts = (content?.heading || '').trim().split(/\s+/)
   const headingLast = headingParts.pop()
 
-  useEffect(() => {
-    let active = true
-    getDocs(collection(db, 'contact-images'))
-      .then((snapshot) => {
-        if (!active || snapshot.empty) return
-        const next = { ...defaultContactImages }
-        snapshot.docs.forEach((document) => {
-          if (next[document.id]) next[document.id] = document.data()
-        })
-        setContactImages(next)
-      })
-      .catch((error) => console.error('Unable to load contact page images:', error))
-    return () => { active = false }
-  }, [])
+  if (!content || !global) return <SiteContentStatus />
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-default text-white">
@@ -97,15 +86,17 @@ export default function Contact() {
         <motion.div initial={{ opacity: 0, x: 32 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.15 }} className="relative mx-auto w-full max-w-2xl pb-10 pl-5 sm:pb-16 sm:pl-12 lg:mx-0">
           <div className="absolute right-0 top-0 h-[82%] w-[88%] border border-beige/25" aria-hidden="true" />
           <div className="relative mt-5 aspect-[4/5] w-[92%] overflow-hidden sm:mt-9 sm:aspect-[5/6]">
-            {contactImages.primary?.imageUrl ? <Image src={contactImages.primary.imageUrl} alt={contactImages.primary.imageAlt || 'TMUCSA team members together'} fill priority sizes="(min-width: 1024px) 45vw, 90vw" className="object-cover object-[58%_center]" /> : <div className="absolute inset-0 bg-white/5" aria-hidden="true" />}
+            {contactImages.primary?.imageUrl ? <Image src={contactImages.primary.imageUrl} alt={contactImages.primary.imageAlt ?? ''} fill priority sizes="(min-width: 1024px) 45vw, 90vw" className="object-cover object-[58%_center]" /> : <div className="absolute inset-0 bg-white/5" aria-hidden="true" />}
             <div className="absolute inset-0 bg-gradient-to-t from-default/65 via-transparent to-transparent" />
           </div>
 
           <div className="absolute bottom-0 right-0 w-[54%] border-[6px] border-default bg-default sm:border-[10px]">
             <div className="relative aspect-[4/3] overflow-hidden">
-              {contactImages.secondary?.imageUrl ? <Image src={contactImages.secondary.imageUrl} alt={contactImages.secondary.imageAlt || 'Students at a TMUCSA event'} fill sizes="(min-width: 1024px) 24vw, 48vw" className="object-cover" /> : <div className="absolute inset-0 bg-white/5" aria-hidden="true" />}
+              {contactImages.secondary?.imageUrl ? <Image src={contactImages.secondary.imageUrl} alt={contactImages.secondary.imageAlt ?? ''} fill sizes="(min-width: 1024px) 24vw, 48vw" className="object-cover" /> : <div className="absolute inset-0 bg-white/5" aria-hidden="true" />}
             </div>
           </div>
+
+          <ContentStatus loading={imageLoading} error={imageError} retry={retryImages} label="contact photos" emptyMessage={!contactImages.primary?.imageUrl && !contactImages.secondary?.imageUrl ? 'No contact photos have been published yet.' : null} className="relative z-10 !py-4" />
 
           <div className="absolute bottom-5 left-0 hidden -rotate-90 origin-bottom-left font-jost text-[10px] tracking-[0.3em] text-white/45 sm:block" aria-hidden="true">
             CULTURE · COMMUNITY · CONNECTION

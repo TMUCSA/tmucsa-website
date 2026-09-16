@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { authorizeAdminRequest, serializeDocument } from '@/lib/admin-api'
 import { getAdminDb } from '@/lib/firebase-admin'
-import { linkPayload } from '@/lib/link-hub'
+import { linkPayload, saveLink } from '@/lib/link-hub'
 import { writeAuditLog } from '@/lib/audit-log'
 
 export const runtime = 'nodejs'
@@ -23,13 +23,13 @@ export async function POST(request) {
     if (payload.error) return NextResponse.json({ error: payload.error }, { status: 400 })
     const db = getAdminDb()
     const reference = db.collection('links').doc()
-    await reference.set({
+    await saveLink(db, reference, {
       ...payload.data,
       createdAt: FieldValue.serverTimestamp(),
       createdBy: authorization.admin.uid,
       updatedAt: FieldValue.serverTimestamp(),
       updatedBy: authorization.admin.uid,
-    })
+    }, { create: true })
     await writeAuditLog(db, authorization.admin, 'create', 'link', reference.id, `Created link “${payload.data.title}”`)
     return NextResponse.json({ link: serializeDocument(await reference.get()) }, { status: 201 })
   } catch (error) {

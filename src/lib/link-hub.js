@@ -43,7 +43,9 @@ export function linkPayload(body) {
       order,
       enabled: body.enabled !== false,
       featured: body.featured === true,
-      showTicketPrompt: category === 'Tickets' && body.showTicketPrompt === true,
+      showTicketPrompt: body.showTicketPrompt === true,
+      hideFromLinkList: body.showTicketPrompt === true && body.hideFromLinkList === true,
+      popupButtonText: String(body.popupButtonText || '').trim().slice(0, 60) || (category === 'Tickets' ? 'Get tickets' : 'Learn more'),
       startsAt,
       expiresAt,
     },
@@ -62,4 +64,33 @@ export function isLinkActive(link, now = new Date()) {
   const startsAt = dateValue(link.startsAt)
   const expiresAt = dateValue(link.expiresAt)
   return (!startsAt || startsAt <= now) && (!expiresAt || expiresAt > now)
+}
+
+// Keep the existing flag so previously configured ticket popups continue to work.
+// A shared document serializes selections even when two admins enable different links.
+export async function saveLink(db, reference, data, { create = false } = {}) {
+  return db.runTransaction(async (transaction) => {
+    const selection = db.collection('linkSettings').doc('popup')
+    await transaction.get(selection)
+    const snapshot = await transaction.get(reference)
+    if (!create && !snapshot.exists) return false
+    const previous = data.showTicketPrompt
+      ? await transaction.get(db.collection('links').where('showTicketPrompt', '==', true))
+      : null
+
+    for (const doc of previous?.docs || []) {
+      if (doc.id !== reference.id) {
+        transaction.update(doc.ref, {
+          showTicketPrompt: false,
+          hideFromLinkList: false,
+          updatedAt: data.updatedAt,
+          updatedBy: data.updatedBy,
+        })
+      }
+    }
+    if (create) transaction.set(reference, data)
+    else transaction.update(reference, data)
+    transaction.set(selection, { updatedAt: data.updatedAt })
+    return true
+  })
 }

@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useSiteContent } from './SiteContentProvider';
 
 export default function Footer() {
-    const { socialLinks, footerCopyright } = useSiteContent('global')
+    const global = useSiteContent('global')
+    if (!global) return null
+    const { socialLinks, footerCopyright } = global
 
     return (
         <footer className=" w-screen h-fit sm:px-20 flex text-white my-8 font-josefin">
