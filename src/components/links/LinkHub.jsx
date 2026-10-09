@@ -35,10 +35,9 @@ export default function LinkHub() {
         <ContentStatus loading={loading} error={error} retry={retry} label="links" emptyMessage={!groups.length ? 'There are no active links right now. Check back soon.' : null} />
 
         <div className="mt-10 space-y-12">
-          {groups.map((group, groupIndex) => (
+          {groups.map((group) => (
             <section key={group.category}>
               <div className="mb-4 flex items-center gap-4">
-                <span className="font-jost text-[10px] tracking-[0.24em] text-beige/40">{String(groupIndex + 1).padStart(2, '0')}</span>
                 <h2 className="font-josefin text-sm font-semibold uppercase tracking-[0.2em] text-beige/75">{group.category}</h2>
                 <span className="h-px flex-1 bg-white/10" />
               </div>

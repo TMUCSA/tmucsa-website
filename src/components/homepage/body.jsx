@@ -47,10 +47,10 @@ export default function Body() {
   if (!content) return <div className="min-h-64" aria-busy="true" />;
 
   const statements = [
-    { number: '01', title: 'OUR GOAL', text: content.ourGoal },
-    { number: '02', title: 'WHAT WE OFFER', text: content.weOffer },
-    { number: '03', title: 'OUR VALUES', text: content.values },
-    { number: '04', title: 'JOIN US', text: content.joinUs },
+    { title: 'OUR GOAL', text: content.ourGoal },
+    { title: 'WHAT WE OFFER', text: content.weOffer },
+    { title: 'OUR VALUES', text: content.values },
+    { title: 'JOIN US', text: content.joinUs },
   ];
 
   return (
@@ -58,7 +58,7 @@ export default function Body() {
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 xl:px-24">
         <div className="mb-14 flex flex-col justify-between gap-6 border-b border-white/15 pb-8 sm:flex-row sm:items-end lg:mb-20">
           <div>
-            <p className="font-jost text-xs tracking-[0.28em] text-beige/60">02 / OUR COMMUNITY</p>
+            <p className="font-jost text-xs tracking-[0.28em] text-beige/60">OUR COMMUNITY</p>
             <h2 className="mt-5 font-josefin text-4xl font-semibold tracking-tight sm:text-6xl">WHAT DRIVES US</h2>
           </div>
         </div>
@@ -73,9 +73,8 @@ export default function Body() {
 
           <div className="grid border-t border-white/15 sm:grid-cols-2">
             {statements.slice(0, 2).map((statement, index) => (
-              <motion.article key={statement.number} variants={index === 0 ? slideInRight : slideInLeft} initial="hidden" animate={inView ? 'visible' : 'hidden'} transition={{ duration: 0.65, delay: index * 0.1 }} className="border-b border-white/15 py-8 sm:px-7 sm:first:border-r sm:first:pl-0">
-                <p className="font-jost text-xs tracking-[0.25em] text-beige/50">{statement.number}</p>
-                <h3 className="mt-8 font-josefin text-2xl font-semibold">{statement.title}</h3>
+              <motion.article key={statement.title} variants={index === 0 ? slideInRight : slideInLeft} initial="hidden" animate={inView ? 'visible' : 'hidden'} transition={{ duration: 0.65, delay: index * 0.1 }} className="border-b border-white/15 py-8 sm:px-7 sm:first:border-r sm:first:pl-0">
+                <h3 className="font-josefin text-2xl font-semibold">{statement.title}</h3>
                 <p className="mt-4 font-jost font-light leading-7 text-white/60">{statement.text}</p>
               </motion.article>
             ))}
@@ -88,9 +87,8 @@ export default function Body() {
 
         <div className="mt-8 grid border-t border-white/15 sm:grid-cols-2 lg:ml-[calc(50%+1.25rem)]">
           {statements.slice(2).map((statement, index) => (
-            <motion.article key={statement.number} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }} transition={{ duration: 0.65, delay: 0.2 + index * 0.1 }} className="border-b border-white/15 py-8 sm:px-7 sm:first:border-r sm:first:pl-0">
-              <p className="font-jost text-xs tracking-[0.25em] text-beige/50">{statement.number}</p>
-              <h3 className="mt-8 font-josefin text-2xl font-semibold">{statement.title}</h3>
+            <motion.article key={statement.title} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }} transition={{ duration: 0.65, delay: 0.2 + index * 0.1 }} className="border-b border-white/15 py-8 sm:px-7 sm:first:border-r sm:first:pl-0">
+              <h3 className="font-josefin text-2xl font-semibold">{statement.title}</h3>
               <p className="mt-4 font-jost font-light leading-7 text-white/60">{statement.text}</p>
             </motion.article>
           ))}
