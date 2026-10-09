@@ -56,7 +56,7 @@ export default function Description() {
                 animate={inView || animationTriggered ? "visible" : "hidden"}
             >
                 <motion.div className="font-josefin" variants={itemVariants}>
-                    <p className="mb-7 font-jost text-xs tracking-[0.28em] text-beige/60">01 / ABOUT US</p>
+                    <p className="mb-7 font-jost text-xs tracking-[0.28em] text-beige/60">ABOUT US</p>
                     <motion.h2 className="text-5xl font-semibold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
                         {headingLead ? <>{headingLead}<br /></> : null}
                         <span className="text-beige">{headingLast}</span>

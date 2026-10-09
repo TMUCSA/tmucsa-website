@@ -116,7 +116,7 @@ export default function Contact() {
             <div className="grid border-t border-white/15 lg:grid-cols-2">
               <motion.a variants={reveal} transition={{ duration: 0.65 }} href={`mailto:${content.emailAddress}`} className="group border-b border-white/15 py-9 transition-colors hover:bg-white/[0.025] lg:border-r lg:px-8 lg:first:pl-0">
                 <div className="flex items-start justify-between gap-6">
-                  <span className="font-jost text-xs tracking-[0.25em] text-beige/55">01 / EMAIL</span>
+                  <span className="font-jost text-xs tracking-[0.25em] text-beige/55">EMAIL</span>
                   <span className="text-beige transition-transform group-hover:translate-x-1"><Arrow /></span>
                 </div>
                 <h3 className="mt-10 break-all font-josefin text-2xl font-semibold sm:text-3xl">{content.emailAddress}</h3>
@@ -126,7 +126,7 @@ export default function Contact() {
               <motion.div variants={reveal} transition={{ duration: 0.65 }} className="group border-b border-white/15 py-9 transition-colors hover:bg-white/[0.025] lg:px-8 lg:last:pr-0">
                 <Link href={global.socialLinks.instagram} target="_blank" rel="noreferrer" className="block">
                   <div className="flex items-start justify-between gap-6">
-                    <span className="font-jost text-xs tracking-[0.25em] text-beige/55">02 / INSTAGRAM</span>
+                    <span className="font-jost text-xs tracking-[0.25em] text-beige/55">INSTAGRAM</span>
                     <span className="text-beige transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"><Arrow diagonal /></span>
                   </div>
                   <h3 className="mt-10 font-josefin text-3xl font-semibold">@tmucsa</h3>

@@ -145,7 +145,7 @@ export default function ExecutiveSection({ section, membersById }) {
 
 				<div className='relative z-10 mx-auto max-w-6xl'>
 					<div className='mb-12 flex items-center gap-4 border-b border-white/15 pb-5 font-jost text-xs uppercase tracking-[0.28em] text-white/55'>
-						<span className='text-beige/65'>01</span><span className='h-px w-12 bg-beige/60' /><span>{section?.name ?? 'Leadership'}</span>
+						<span>{section?.name ?? 'Leadership'}</span>
 					</div>
 					<div className='grid grid-cols-3 items-start justify-items-center gap-x-8'>
 						<div className='flex justify-center w-full mt-10'>

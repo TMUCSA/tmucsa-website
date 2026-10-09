@@ -80,7 +80,7 @@ const Arrow = () => <svg className="h-5 w-5" fill="none" stroke="currentColor" v
                             </div>
                             <div className='relative flex min-h-[390px] flex-col justify-between p-7 sm:p-10 lg:p-14'>
                                 <div className='flex items-start justify-between gap-6'>
-                                    <p className='text-xs tracking-[0.25em] text-beige/55'>{String(key + 1).padStart(2, '0')} / EVENT</p>
+                                    <p className='text-xs tracking-[0.25em] text-beige/55'>EVENT</p>
                                     <p className='text-xs uppercase tracking-[0.16em] text-white/45'>{format(event.date, 'MMM d, yyyy')}</p>
                                 </div>
                                 <div className='my-12'>
