@@ -12,7 +12,6 @@ import { db } from '@/lib/firebase'
 const socialNetworks = [
   { key: 'linkedin', label: 'LinkedIn', icon: '/icons/socials/linkedin.png' },
   { key: 'tiktok', label: 'TikTok', icon: '/icons/socials/tik-tok.png' },
-  { key: 'discord', label: 'Discord', icon: '/icons/socials/discord.png' },
 ]
 
 const reveal = {

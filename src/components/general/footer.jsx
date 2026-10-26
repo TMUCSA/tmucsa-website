@@ -25,9 +25,6 @@ export default function Footer() {
                     <Link href={socialLinks.tiktok} target="_blank">
                         <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer' src="/icons/socials/tik-tok.png" width={300} height={300} alt="TikTok" />
                     </Link>
-                    <Link href={socialLinks.discord} target="_blank">
-                        <Image className='h-6 w-6 opacity-70 hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer' src="/icons/socials/discord.png" width={300} height={300} alt="Discord" />
-                    </Link>
                 </div>
                 <div className="text-center font-thin w-full text-xs lg:text-md lg:tracking-wider text-gray-100">
                     <p>{footerCopyright}</p>
