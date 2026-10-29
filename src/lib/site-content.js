@@ -2,7 +2,7 @@
 export const siteContentSchema = {
   global: {
     navItems: 'navigation',
-    socialLinks: { linkedin: 'string', instagram: 'string', tiktok: 'string', discord: 'string' },
+    socialLinks: { linkedin: 'string', instagram: 'string', tiktok: 'string' },
     footerCopyright: 'string',
   },
   home: {
